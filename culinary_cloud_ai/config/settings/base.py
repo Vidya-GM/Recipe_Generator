@@ -28,6 +28,8 @@ DEFAULT_APPS = [
 ]
 
 CUSTOM_APPS = [
+    "applications.recipe_user",
+    "applications.recipes",
     
 ]
 
