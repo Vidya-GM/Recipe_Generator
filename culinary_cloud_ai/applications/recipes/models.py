@@ -14,7 +14,7 @@ class CookingTime(models.Model):
     time_in_minutes = models.PositiveIntegerField(help_text="Time is in minutes", unique=True)
 
     def __str__(self):
-        return self.time_in_minutes
+        return f"{self.time_in_minutes} minutes"
 
 
 class Recipe(models.Model):
@@ -23,12 +23,12 @@ class Recipe(models.Model):
         ('Medium', 'Medium'),
         ('Hard', 'Hard'),
     ]
-
+    recipe_owner = models.ForeignKey("recipe_user.RecipeUser", null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     ingredients = models.TextField()
     instructions = models.TextField()
-    recipe_image = models.ImageField(upload_to='recipes_pic/',null=True, blank=True)
+    recipe_image = models.ImageField(upload_to='recipes_pic/', null=True, blank=True)
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
     cuisine = models.ForeignKey(Cuisine, on_delete=models.SET_NULL, null=True, blank=True)
     cooking_time = models.ForeignKey(CookingTime, on_delete=models.SET_NULL, null=True, blank=True)
