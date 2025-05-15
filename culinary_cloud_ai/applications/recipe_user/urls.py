@@ -1,9 +1,9 @@
 from django.urls import path
-from applications.recipe_user.views
+from applications.recipe_user import views
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # path("", include("applications.recipe_user.urls")),
-    # path("", include("applications.recipes.urls")),
+
+    path("recipe_user", views.simple_func, name="recipe_user"),
+
 
 ]
