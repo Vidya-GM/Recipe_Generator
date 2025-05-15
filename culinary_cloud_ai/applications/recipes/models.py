@@ -1,37 +1,38 @@
 from django.db import models
-from django.conf import settings
+
+# Create your models here.
+from django.db import models
+
+# Create your models here.
+class Cuisine(models.Model):
+    cusine_name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.cusine_name
+    
+class CookingTime(models.Model):
+    time_in_minutes = models.PositiveIntegerField(help_text="Time is in minutes", unique=True)
+
+    def __str__(self):
+        return f"{self.time_in_minutes} minutes"
 
 
 class Recipe(models.Model):
-    # link to the user who generated it
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="recipes"
-    )
-
-    # basic fields
+    DIFFICULTY_CHOICES = [
+        ('Easy', 'Easy'),
+        ('Medium', 'Medium'),
+        ('Hard', 'Hard'),
+    ]
+    recipe_owner = models.ForeignKey("recipe_user.RecipeUser", null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)  # optional short summary
+    description = models.TextField(blank=True)
     ingredients = models.TextField()
     instructions = models.TextField()
-
-    # image: store URL from OpenAI or uploaded later
-    image_url = models.URLField(blank=True, null=True)
-
-    # metadata
-    cooking_time = models.PositiveIntegerField(help_text="Time in minutes")
-    difficulty = models.CharField(
-        max_length=50,
-        choices=[
-            ('easy', 'Easy'),
-            ('medium', 'Medium'),
-            ('hard', 'Hard'),
-        ]
-    )
-
-    # tags, categories, etc. can be added later
+    recipe_image = models.ImageField(upload_to='recipes_pic/', null=True, blank=True)
+    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
+    cuisine = models.ForeignKey(Cuisine, on_delete=models.SET_NULL, null=True, blank=True)
+    cooking_time = models.ForeignKey(CookingTime, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} by {self.user.username}"
+        return self.title

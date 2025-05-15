@@ -16,6 +16,7 @@ dev-makemigrations-app:
 dev-migrate:
 	python manage.py migrate  --settings=config.settings.dev
 
+
 dev-shell:
 	python manage.py shell --settings=config.settings.dev
 
