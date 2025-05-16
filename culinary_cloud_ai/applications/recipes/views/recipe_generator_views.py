@@ -11,7 +11,7 @@ def generate_recipe_text(prompt: str) -> str:
         model="gpt-4.1-nano",  # or "gpt-4.0", "gpt-3.5-turbo", etc.
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
-        max_tokens=500
+        max_tokens=1000
     )
 
     print("Usage stats:")
