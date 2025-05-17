@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<h1>Recipe_User Login</h1> 
+        <!-- css for box -->
+    <div class="login-box">
+    <!-- Search Form -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">login</button>
+        </form>
+    </div>
+
+{% endblock %}
