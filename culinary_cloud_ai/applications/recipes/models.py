@@ -5,10 +5,10 @@ from django.db import models
 
 # Create your models here.
 class Cuisine(models.Model):
-    cusine_name = models.CharField(max_length=100, unique=True)
+    cuisine_name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.cusine_name
+        return self.cuisine_name
     
 class CookingTime(models.Model):
     time_in_minutes = models.PositiveIntegerField(help_text="Time is in minutes", unique=True)
