@@ -4,7 +4,8 @@ from applications.recipe_user import views
 urlpatterns = [
 
     path("login/", views.recipeuserLogin, name="login"),
-    path("logout/", views.recipeuserLogout, name="logout")
+    path("logout/", views.recipeuserLogout, name="logout"),
+    path('register/', views.recipeuserRegister, name='register'),
 
 ]
 

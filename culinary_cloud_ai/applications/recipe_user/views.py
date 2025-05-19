@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from applications.recipe_user.forms import RecipeUserRegistrationForm
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -29,3 +32,17 @@ def recipeuserLogin(request):
 def recipeuserLogout(request):
     logout(request)     
     return redirect('login')
+
+def recipeuserRegister(request):
+    if request.method == "POST":
+        form = RecipeUserRegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registration Successful!! You can log-in now")
+            return redirect("login")
+        else:
+            messages.error(request, 'There were errors in your form. Please fix them below.')
+            return render(request, "recipe_user/recipeuser_register.html", {"form": form})
+    else:
+        form = RecipeUserRegistrationForm()
+        return render(request, "recipe_user/recipeuser_register.html", {"form": form})
