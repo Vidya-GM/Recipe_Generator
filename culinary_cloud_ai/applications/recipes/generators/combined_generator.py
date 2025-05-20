@@ -59,7 +59,7 @@ def generate_full_recipe(prompt: str) -> dict:
         "cooking_time": structured.get("cooking_time"),
         "image_url": image_url,
         "local_image_path": local_image_path,
-        "raw_response": full_response  # optional for debugging
+        # "raw_response": full_response  # optional for debugging
     }
 
 

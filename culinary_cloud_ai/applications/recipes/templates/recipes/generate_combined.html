@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chef — Create a Recipe</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2em auto; }
+    label { display: block; margin-top: 1em; }
+    input, button { width: 100%; padding: 0.5em; margin-top: 0.5em; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>AI Chef — Generate a Recipe</h1>
+
+  <form method="post" action="{% url 'recipes:generate_combined' %}">
+    {% csrf_token %}
+
+    <label for="id_ingredients">Ingredients</label>
+    <input
+      type="text"
+      name="ingredients"
+      id="id_ingredients"
+      placeholder="e.g. salmon filet, lime, honey"
+      required
+    >
+
+    <label for="id_cooking_time">Cooking Time</label>
+    <input
+      type="text"
+      name="cooking_time"
+      id="id_cooking_time"
+      placeholder="e.g. under 60 minutes"
+    >
+
+    <label for="id_dish_type">Dish Type</label>
+    <input
+      type="text"
+      name="dish_type"
+      id="id_dish_type"
+      placeholder="e.g. Main course"
+    >
+
+    <label for="id_serving_suggestion">Serving Suggestion</label>
+    <input
+      type="text"
+      name="serving_suggestion"
+      id="id_serving_suggestion"
+      placeholder="e.g. simple but elegant dish"
+    >
+
+    <button type="submit">Generate Recipe</button>
+  </form>
+</body>
+</html>

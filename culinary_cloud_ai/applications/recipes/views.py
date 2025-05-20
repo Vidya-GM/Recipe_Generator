@@ -1,27 +1,28 @@
 # applications/recipes/views.py
 from django.views import View
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 
 from .generators.combined_generator import generate_full_recipe
 
+
 class GenerateCombinedView(View):
-    """Run the full pipeline (text + image) and return structured data."""
+    """Run the full pipeline (text + image) and render a recipe page."""
     def get(self, request):
-        # Render a unified form for ingredients and options
-        return render(request, 'generate_combined.html')
+        # Render the form
+        return render(request, 'recipes/generate_combined.html')
 
     def post(self, request):
         # Gather user inputs
-        ingredients = request.POST.get('ingredients', '')
-        cooking_time = request.POST.get('cooking_time', '')
-        dish_type = request.POST.get('dish_type', '')
-        serving_suggestion = request.POST.get('serving_suggestion', '')
+        ingredients = request.POST.get('ingredients', '').strip()
+        cooking_time = request.POST.get('cooking_time', '').strip()
+        dish_type = request.POST.get('dish_type', '').strip()
+        serving_suggestion = request.POST.get('serving_suggestion', '').strip()
 
         if not ingredients:
-            return HttpResponseBadRequest('Missing `ingredients` field.')
+            return HttpResponseBadRequest('Missing “ingredients” field.')
 
-        # Build the combined prompt
+        # Build the combined prompt exactly as specified
         prompt = f"""
 You are an AI chef assistant. Generate a complete, structured recipe based on the following constraints.
 Use up to 500 tokens.
@@ -58,9 +59,21 @@ Cooking time: {cooking_time}.
 Type: {dish_type}.
 Serving suggestion: {serving_suggestion}.
 """
+
         try:
-            # Call the combined generator which returns both text and images
+            # Call your combined generator
             result = generate_full_recipe(prompt)
-            return JsonResponse(result, safe=False)
         except Exception as e:
-            return HttpResponseBadRequest(str(e))
+            return HttpResponseBadRequest(f"AI generation error: {e}")
+
+        # Render the result in a template
+        return render(request, 'recipes/recipe_detail.html', {
+            'title': result.get('title', ''),
+            'description': result.get('description', ''),
+            'ingredients': result.get('ingredients', []),
+            'instructions': result.get('instructions', []),
+            'difficulty': result.get('difficulty', ''),
+            'cuisine': result.get('cuisine', ''),
+            'cooking_time': result.get('cooking_time', ''),
+            'image_url': result.get('image_url') or result.get('local_path'),
+        })
