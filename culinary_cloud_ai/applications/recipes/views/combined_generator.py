@@ -2,6 +2,7 @@ from recipe_generator_views import generate_recipe_text
 from image_generator_views import generate_recipe_image, download_image_to_media
 import json
 import re
+import uuid
 
 
 def generate_full_recipe(prompt: str) -> dict:
@@ -30,15 +31,22 @@ def generate_full_recipe(prompt: str) -> dict:
     raw_title = structured.get("title", "Unnamed Dish")
     filename = re.sub(r'\W+', '_', raw_title.lower()).strip('_')
 
-    # 4. Generate image prompt using the dish title
+    # 3.1 Append a short unique ID so names never collide
+    unique_id = uuid.uuid4().hex[:8]
+    filename_with_uuid = f"{filename}_{unique_id}"
+
+    # 4. Generate image prompt using the dish description
+    description = structured.get("description", raw_title)
     image_prompt = (
-        f"A realistic photo of {raw_title}, use only ingredients from title, freshly cooked, served on a white ceramic plate, no any text on the image, "
-        "natural lighting, visually appealing"
+        f"A highly realistic photo of a freshly cooked dish featuring {description}, made exclusively using the ingredients mentioned."
+        "The dish is elegantly plated on a clean white ceramic plate, styled to highlight its freshness and appeal."
+        "Captured in soft, natural lighting, with no text or labels, and composed for maximum visual allure and gourmet presentation."
+        "WITHOUT any text on the image"
     )
 
     # 5. Generate and download the image
     image_url = generate_recipe_image(image_prompt)
-    local_image_path = download_image_to_media(image_url, filename)
+    local_image_path = download_image_to_media(image_url, filename_with_uuid)
 
     # 6. Return everything structured
     return {
@@ -87,7 +95,7 @@ if __name__ == "__main__":
       "instructions": ["<step1>", "<step2>", "..."],
       "difficulty": "<Easy|Medium|Hard>",
       "cuisine": "<Cuisine Name>",
-      "cooking_time": "<Time in minutes, e.g. '15 minutes'>"
+      "cooking_time": "<Time in minutes, e.g. '30'>"
     }
 
     ---
@@ -101,14 +109,14 @@ if __name__ == "__main__":
 
     ---
 
-    Generate a recipe using the following ingredients: rice, carotot, onion, tomato.
+    Generate a recipe using the following ingredients: salmon filet, lime, honey.
     Cooking time: under 60 minutes.
-    Type: Fried.
+    Type: Any.
     Serving suggestion: simple but elegant dish.
     """
 
     data = generate_full_recipe(prompt)
-
+    # Debugging prints
     if data:
         print("\n=== RECIPE GENERATED ===")
         print("Title:", data["title"])
@@ -128,3 +136,7 @@ if __name__ == "__main__":
 
         print("\nImage URL:", data["image_url"])
         print("Saved to:", data["local_image_path"])
+
+        # # Print full response for debugging
+        # print("\n=== FULL RESPONSE ===")
+        # print(data["raw_response"])
