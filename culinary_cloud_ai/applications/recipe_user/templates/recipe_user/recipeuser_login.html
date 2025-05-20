@@ -1,6 +1,16 @@
 {% extends "main.html" %}
 
+
 {% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert -{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+
 
 <h1>Recipe_User Login</h1> 
         <!-- css for box -->
