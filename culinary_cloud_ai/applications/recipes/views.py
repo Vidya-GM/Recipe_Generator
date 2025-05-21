@@ -1,28 +1,39 @@
-# applications/recipes/views.py
 from django.views import View
 from django.shortcuts import render
 from django.http import HttpResponseBadRequest
-
+from .forms import RecipeInputForm
 from .generators.combined_generator import generate_full_recipe
 
 
 class GenerateCombinedView(View):
     """Run the full pipeline (text + image) and render a recipe page."""
+
     def get(self, request):
-        # Render the form
-        return render(request, 'recipes/generate_combined.html')
+        form = RecipeInputForm()
+        return render(request, 'recipes/generate_combined.html', {'form': form})
 
     def post(self, request):
-        # Gather user inputs
-        ingredients = request.POST.get('ingredients', '').strip()
-        cooking_time = request.POST.get('cooking_time', '').strip()
-        dish_type = request.POST.get('dish_type', '').strip()
-        serving_suggestion = request.POST.get('serving_suggestion', '').strip()
+        form = RecipeInputForm(request.POST)
+        if not form.is_valid():
+            return HttpResponseBadRequest('Form is not valid.')
 
-        if not ingredients:
-            return HttpResponseBadRequest('Missing “ingredients” field.')
+        # Extract checkbox ingredients (model instances)
+        selected_ingredients = form.cleaned_data['ingredients']  # List of CheckboxIngredient instances
+        manual_ingredients = form.cleaned_data.get('manual_ingredients', '')
+        cooking_time = form.cleaned_data.get('cooking_time')
+        cuisine = form.cleaned_data.get('cuisine')
+        difficulty = form.cleaned_data.get('difficulty')
 
-        # Build the combined prompt exactly as specified
+        # Convert ingredient objects to strings
+        combined_ingredients = [ing.name for ing in selected_ingredients]
+        if manual_ingredients:
+            combined_ingredients.append(manual_ingredients)
+
+        ingredients_str = ', '.join(combined_ingredients)
+        cooking_time_str = f"{cooking_time.time_in_minutes}" if cooking_time else "unspecified"
+        cuisine_str = cuisine.cuisine_name if cuisine else "unspecified"
+
+        # Build the prompt
         prompt = f"""
 You are an AI chef assistant. Generate a complete, structured recipe based on the following constraints.
 Use up to 500 tokens.
@@ -54,19 +65,22 @@ Constraints:
 
 ---
 
-Generate a recipe using the following ingredients: {ingredients}.
-Cooking time: {cooking_time}.
-Type: {dish_type}.
-Serving suggestion: {serving_suggestion}.
+Filter out any inappropriate, harmful, or non-edible ingredients
+(e.g., gasoline, porn, wood, drugs). Only use safe, edible items.
+
+---
+
+Generate a recipe using the following ingredients: {ingredients_str}.
+Cooking time: {cooking_time_str}.
+Cuisine: {cuisine_str}.
+Difficulty: {difficulty}.
 """
 
         try:
-            # Call your combined generator
             result = generate_full_recipe(prompt)
         except Exception as e:
             return HttpResponseBadRequest(f"AI generation error: {e}")
 
-        # Render the result in a template
         return render(request, 'recipes/recipe_detail.html', {
             'title': result.get('title', ''),
             'description': result.get('description', ''),

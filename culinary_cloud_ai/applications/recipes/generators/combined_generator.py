@@ -36,9 +36,11 @@ def generate_full_recipe(prompt: str) -> dict:
     filename_with_uuid = f"{filename}_{unique_id}"
 
     # 4. Generate image prompt using the dish description
-    description = structured.get("description", raw_title)
+    title = structured.get("title", raw_title)
+    ingredients = structured.get("ingredients", [])
+    description = structured.get("description", "")
     image_prompt = (
-        f"A highly realistic photo of a freshly cooked dish featuring {description}, made exclusively using the ingredients mentioned."
+        f"A highly realistic photo of a freshly cooked {title} based on {description}, made exclusively using the ingredients mentioned {ingredients}."
         "The dish is elegantly plated on a clean white ceramic plate, styled to highlight its freshness and appeal."
         "Captured in soft, natural lighting, with no text or labels, and composed for maximum visual allure and gourmet presentation."
         "WITHOUT any text on the image"
