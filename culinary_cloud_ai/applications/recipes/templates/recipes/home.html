@@ -1,8 +1,80 @@
 {% extends "main.html" %}
+{% load static %}
+
+
+{% block title %}Recipe Generator | Recipegenerator{% endblock %}
 
 {% block content %}
+<form id="recipe-form" class="mb-4" action="{% url 'recipe_placeholder' %}" method="get">
+  <h4>Choose Ingredients:</h4>
+<div class="row mb-3">
+  {% for item in ingredients %}
+    <div class="col-md-6">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="ingredients" value="{{ item }}" id="ing-{{ item|lower }}">
+        <label class="form-check-label" for="ing-{{ item|lower }}">{{ item }}</label>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
-<h1>Homepage</h1> 
 
 
+  <div class="mb-3">
+    <label for="customInput" class="form-label">Additional Ingredients or Style</label>
+    <input type="text" class="form-control" id="customInput" placeholder="e.g. Garlic, Italian">
+  </div>
+
+  <div class="mb-3">
+  <label for="difficulty" class="form-label">Difficulty</label>
+  <select class="form-select" id="difficulty" name="difficulty" required>
+    <option value="" disabled selected>Select difficulty</option>
+    <option value="Easy">Easy</option>
+    <option value="Medium">Medium</option>
+    <option value="Challenging">Challenging</option>
+  </select>
+</div>
+
+
+  <div class="mb-3">
+    <label for="prepTime" class="form-label">Preparation Time</label>
+    <select class="form-select" id="prepTime">
+      <option value="15">15 minutes</option>
+      <option value="30">30 minutes</option>
+      <option value="45">45 minutes</option>
+      <option value=">45">More than 45 minutes</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100">Generate Recipe</button>
+
+  <img src="{% static 'images/bongo.gif' %}" alt="Loading..." id="Loading_GIF" style="display: none;" width="100">
+</form>
+
+<div id="recipeResult" style="display: none;">
+  {% if recipe %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("Loading_GIF").style.display = "none";
+        document.getElementById("recipeResult").style.display = "block";
+      });
+    </script>
+
+    <h3>{{ recipe.title }}</h3>
+    <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+    <p><strong>Style:</strong> {{ recipe.style }}</p>
+    <p><strong>Preparation Time:</strong> {{ recipe.time }} minutes</p>
+  {% endif %}
+</div>
+
+<script>
+  const form = document.getElementById("recipe-form");
+  const loadingGif = document.getElementById("Loading_GIF");
+  const recipeResult = document.getElementById("recipeResult");
+
+  form.addEventListener("submit", function (e) {
+    loadingGif.style.display = "block";
+    recipeResult.style.display = "none";
+  });
+</script>
 {% endblock %}

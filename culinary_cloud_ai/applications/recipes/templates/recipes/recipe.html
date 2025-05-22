@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+{% load static %}
+
+
+{% block content %}
+  <div class="text-center mt-5">
+    <h2>Your Recipe</h2>
+    <img src="{% static 'images/bongo.gif' %}" alt="Recipe Image" class="img-fluid rounded shadow my-4" style="max-height: 300px;">
+  </div>
+
+  <div class="mt-4">
+    <div class="text-center mt-4">
+  <a href="{% url 'index' %}" class="btn btn-primary">
+    Generate New Recipe
+  </a>
+</div>
+    <h4>Recipe Title:</h4>
+    
+    <p><em>Coming soon...</em></p>
+
+    <h4>Ingredients:</h4>
+    <ul>
+      <li>...</li>
+    </ul>
+
+    <h4>Instructions:</h4>
+    <p>...</p>
+  </div>
+{% endblock %}
