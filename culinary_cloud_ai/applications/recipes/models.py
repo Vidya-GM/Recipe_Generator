@@ -14,12 +14,11 @@ class CookingTime(models.Model):
     def __str__(self):
         return f"{self.time_in_minutes} minutes"
     
-class Ingredients(models.Model):
-    ingredient_name = models.CharField(max_length=150, unique=True)
+class CheckboxIngredient(models.Model):
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.ingredient_name
-
+        return self.name
 
 class Recipe(models.Model):
     DIFFICULTY_CHOICES = [
@@ -30,7 +29,7 @@ class Recipe(models.Model):
     recipe_owner = models.ForeignKey("recipe_user.RecipeUser", null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    ingredients = models.ManyToManyField(Ingredients, blank=False, related_name="recipes")
+    ingredients = models.TextField()
     instructions = models.TextField()
     recipe_image = models.ImageField(upload_to='recipes_pic/', null=True, blank=True)
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
