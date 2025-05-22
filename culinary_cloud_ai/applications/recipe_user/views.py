@@ -20,7 +20,7 @@ def recipeuserLogin(request):
 
                 login(request, recipe_user)
 
-                return redirect('home')
+                return redirect('recipes:home')
             else:
                 print("Authentication failed!")
                 return redirect('login')
