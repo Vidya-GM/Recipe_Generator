@@ -1,5 +1,6 @@
 from django.contrib import admin
 from applications.recipes.models import Recipe, CookingTime, Cuisine, CheckboxIngredient
+from applications.recipes.models import Recipe, CookingTime, Cuisine, CheckboxIngredient
 
 # Register your models here.
 

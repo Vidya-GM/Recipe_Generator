@@ -13,6 +13,7 @@ class CheckboxIngredient(models.Model):
 
 class Cuisine(models.Model):
     cuisine_name = models.CharField(max_length=100, unique=True)
+    cuisine_name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.cuisine_name
@@ -23,7 +24,12 @@ class CookingTime(models.Model):
 
     def __str__(self):
         return f"{self.time_in_minutes} minutes"
+    
+class CheckboxIngredient(models.Model):
+    name = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.name
 
 class Recipe(models.Model):
     DIFFICULTY_CHOICES = [
@@ -38,8 +44,8 @@ class Recipe(models.Model):
     instructions = models.TextField()
     recipe_image = models.ImageField(upload_to='recipes_pic/', null=True, blank=True)
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
-    cuisine = models.ForeignKey(Cuisine, on_delete=models.SET_NULL, null=True, blank=True)
-    cooking_time = models.ForeignKey(CookingTime, on_delete=models.SET_NULL, null=True, blank=True)
+    cuisine = models.ForeignKey(Cuisine, on_delete=models.SET_NULL, null=True, blank=True, related_name="recipes")
+    cooking_time = models.ForeignKey(CookingTime, on_delete=models.SET_NULL, null=True, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

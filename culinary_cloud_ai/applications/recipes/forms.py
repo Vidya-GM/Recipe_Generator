@@ -1,15 +1,17 @@
 from django import forms
 from applications.recipes.models import CookingTime, Cuisine, Recipe, CheckboxIngredient
 
+
 DIFFICULTY_CHOICES = Recipe.DIFFICULTY_CHOICES
 
 
 class RecipeInputForm(forms.Form):
-    ingredients = forms.ModelMultipleChoiceField(
+
+    checkbox_indgredients = forms.ModelMultipleChoiceField(
         queryset=CheckboxIngredient.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
         required=False,
-        label="Choose ingredients"
+        widget=forms.CheckboxSelectMultiple,  # Or SelectMultiple
+        label="Select Ingredients",
     )
 
     manual_ingredients = forms.CharField(
@@ -19,22 +21,23 @@ class RecipeInputForm(forms.Form):
     )
 
     difficulty = forms.ChoiceField(
-        choices=DIFFICULTY_CHOICES,
+        choices=Recipe.DIFFICULTY_CHOICES,
         required=True,
         initial="Medium",
-        label="Choose difficulty"
+        label="Choose a difficulty",
+    
     )
 
     cuisine = forms.ModelChoiceField(
         queryset=Cuisine.objects.all(),
         required=False,
         label="Cuisine",
-        empty_label="Choose a cuisine"
+        empty_label="Choose a cuisine",
     )
 
     cooking_time = forms.ModelChoiceField(
         queryset=CookingTime.objects.all(),
         required=False,
         label="Cooking Time",
-        empty_label="Select cooking time"
+        empty_label="Select cooking time",
     )

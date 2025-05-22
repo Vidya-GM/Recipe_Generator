@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert -{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+
+
+<h1>Recipe_User Login</h1> 
+        <!-- css for box -->
+    <div class="login-box">
+    <!-- Search Form -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">login</button>
+        </form>
+    </div>
+
+{% endblock %}

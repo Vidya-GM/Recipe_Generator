@@ -3,7 +3,11 @@ from applications.recipe_user import views
 
 urlpatterns = [
 
-    path("recipe_user", views.simple_func, name="recipe_user"),
-
+    path("login/", views.recipeuserLogin, name="login"),
+    path("logout/", views.recipeuserLogout, name="logout"),
+    path('register/', views.recipeuserRegister, name='register'),
 
 ]
+
+# http://127.0.0.1:8000/users/login/
+# http://127.0.0.1:8000/users/logout/
