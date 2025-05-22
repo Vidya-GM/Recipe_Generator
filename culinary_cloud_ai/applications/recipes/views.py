@@ -4,6 +4,8 @@ from django.http import HttpResponseBadRequest
 from .forms import RecipeInputForm
 from .generators.combined_generator import generate_full_recipe
 
+def home(request):
+    return render(request, "recipes/home.html")
 
 class GenerateCombinedView(View):
     """Run the full pipeline (text + image) and render a recipe page."""
@@ -18,7 +20,7 @@ class GenerateCombinedView(View):
             return HttpResponseBadRequest('Form is not valid.')
 
         # Extract checkbox ingredients (model instances)
-        selected_ingredients = form.cleaned_data['ingredients']  # List of CheckboxIngredient instances
+        selected_ingredients = form.cleaned_data['indgredients']  # List of CheckboxIngredient instances
         manual_ingredients = form.cleaned_data.get('manual_ingredients', '')
         cooking_time = form.cleaned_data.get('cooking_time')
         cuisine = form.cleaned_data.get('cuisine')
