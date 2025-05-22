@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 2em auto; }
+    img { max-width: 100%; margin: 1em 0; }
+    h1, h2, h3 { margin-top: 1.5em; }
+    ul, ol { margin-left: 1.5em; }
+    a { display: inline-block; margin-top: 2em; text-decoration: none; color: #007bff; }
+  </style>
+</head>
+<body>
+  <h1>{{ title }}</h1>
+  <p><em>{{ description }}</em></p>
+
+  {% if image_url %}
+    <img src="{{ image_url }}" alt="{{ title }}">
+  {% endif %}
+
+  <h2>Ingredients</h2>
+  <ul>
+    {% for item in ingredients %}
+      <li>{{ item }}</li>
+    {% empty %}
+      <li><em>No ingredients provided.</em></li>
+    {% endfor %}
+  </ul>
+
+  <h2>Instructions</h2>
+  <ol>
+    {% for step in instructions %}
+      <li>{{ step }}</li>
+    {% empty %}
+      <li><em>No instructions provided.</em></li>
+    {% endfor %}
+  </ol>
+
+  <p><strong>Difficulty:</strong> {{ difficulty }}</p>
+  <p><strong>Cuisine:</strong> {{ cuisine }}</p>
+  <p><strong>Cooking Time:</strong> {{ cooking_time }}</p>
+
+  <a href="{% url 'recipes:generate_combined' %}">&larr; Generate Another Recipe</a>
+</body>
+</html>

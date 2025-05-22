@@ -1,3 +1,7 @@
 Django==5.1.6
 python-environ==0.4.54
 pillow==11.2.1
+
+openai==1.78.1
+python-dotenv==1.1.0
+requests==2.31.0

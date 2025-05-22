@@ -1,7 +1,11 @@
+# applications/recipes/urls.py
 from django.urls import path
-from applications.recipes import views
+from .views import (
+    GenerateCombinedView,
+)
 
+app_name = 'recipes'
 urlpatterns = [
-    path("", views.home, name="home"),
-
+    # Combined generation endpoint
+    path('generate/', GenerateCombinedView.as_view(), name='generate_combined'),
 ]
