@@ -1,5 +1,5 @@
 from django import forms
-from applications.recipes.models import CookingTime, Cuisine, Recipe, Ingredients
+from applications.recipes.models import CookingTime, Cuisine, Recipe, CheckboxIngredient
 
 
 DIFFICULTY_CHOICES = Recipe.DIFFICULTY_CHOICES
@@ -7,11 +7,17 @@ DIFFICULTY_CHOICES = Recipe.DIFFICULTY_CHOICES
 
 class RecipeInputForm(forms.Form):
 
-    instructions = forms.ModelMultipleChoiceField(
-        queryset=Ingredients.objects.all(),
-        required=True,
+    checkbox_indgredients = forms.ModelMultipleChoiceField(
+        queryset=CheckboxIngredient.objects.all(),
+        required=False,
         widget=forms.CheckboxSelectMultiple,  # Or SelectMultiple
         label="Select Ingredients",
+    )
+
+    manual_ingredients = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2}),
+        required=False,
+        label="Or enter ingredients manually"
     )
 
     difficulty = forms.ChoiceField(
