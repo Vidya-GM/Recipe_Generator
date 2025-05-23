@@ -21,7 +21,7 @@ class GenerateCombinedView(View):
             return HttpResponseBadRequest('Form is not valid.')
 
         # Extract checkbox ingredients (model instances)
-        selected_ingredients = form.cleaned_data['indgredients']  # List of CheckboxIngredient instances
+        selected_ingredients = form.cleaned_data['ingredients']  # List of CheckboxIngredient instances
         manual_ingredients = form.cleaned_data.get('manual_ingredients', '')
         cooking_time = form.cleaned_data.get('cooking_time')
         cuisine = form.cleaned_data.get('cuisine')
