@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseBadRequest
 from .forms import RecipeInputForm
 from .generators.combined_generator import generate_full_recipe
+from .query import save_generated_recipe
 
 def home(request):
     return render(request, "recipes/home.html")
@@ -80,6 +81,7 @@ Difficulty: {difficulty}.
 
         try:
             result = generate_full_recipe(prompt)
+            recipe = save_generated_recipe(result, user=request.user)
         except Exception as e:
             return HttpResponseBadRequest(f"AI generation error: {e}")
 
