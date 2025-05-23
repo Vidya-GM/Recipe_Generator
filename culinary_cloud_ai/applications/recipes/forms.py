@@ -7,7 +7,7 @@ DIFFICULTY_CHOICES = Recipe.DIFFICULTY_CHOICES
 
 class RecipeInputForm(forms.Form):
 
-    indgredients = forms.ModelMultipleChoiceField(
+    ingredients = forms.ModelMultipleChoiceField(
         queryset=CheckboxIngredient.objects.all(),
         required=False,
         widget=forms.CheckboxSelectMultiple,  # Or SelectMultiple
