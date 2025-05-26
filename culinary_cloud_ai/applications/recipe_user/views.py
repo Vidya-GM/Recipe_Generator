@@ -68,3 +68,11 @@ def recipeuserUpdate(request):
     else:
         form = RecipeUserUpdateForm(instance=recipeuser)
         return render(request, "recipe_user/recipeuser_update.html", {"form": form})
+    
+@login_required
+def myRecipes(request):
+    recipeuser = request.user
+    my_recipes = recipeuser.recipe_set.all()
+    print(my_recipes)
+    return render(request, "recipe_user/my_recipes.html", {"my_recipes": my_recipes,
+                                                            "recipeuser": recipeuser})
