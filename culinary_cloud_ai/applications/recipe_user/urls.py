@@ -6,6 +6,8 @@ urlpatterns = [
     path("login/", views.recipeuserLogin, name="login"),
     path("logout/", views.recipeuserLogout, name="logout"),
     path('register/', views.recipeuserRegister, name='register'),
+    path("profile/", views.recipeuserDetails, name="profile"),
+    path("update-profile/", views.recipeuserUpdate, name="update-profile"),
 
 ]
 
