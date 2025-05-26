@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from applications.recipe_user.forms import RecipeUserRegistrationForm
+from applications.recipe_user.forms import RecipeUserRegistrationForm, RecipeUserUpdateForm
 from django.contrib import messages
 
 
@@ -46,3 +47,24 @@ def recipeuserRegister(request):
     else:
         form = RecipeUserRegistrationForm()
         return render(request, "recipe_user/recipeuser_register.html", {"form": form})
+
+@login_required    
+def recipeuserDetails(request):
+    recipeuser = request.user
+    return render(request, "recipe_user/recipeuser_details.html", {"recipeuser": recipeuser})
+
+@login_required
+def recipeuserUpdate(request):
+    recipeuser = request.user
+    if request.method == "POST":
+        form = RecipeUserUpdateForm(request.POST, request.FILES, instance=recipeuser)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Updated Profile Successfully!!")
+            return redirect("profile")
+        else:
+            messages.error(request, "There were errors in your form. Please fix them below.")
+            return render(request, "recipeuser_update.html", {"form": form})
+    else:
+        form = RecipeUserUpdateForm(instance=recipeuser)
+        return render(request, "recipe_user/recipeuser_update.html", {"form": form})

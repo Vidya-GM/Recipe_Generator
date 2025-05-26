@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="profile-box">
+    
+    <h2>{{ recipeuser }}'s Profile</h2>
+        <img src="{{ recipeuser.profile_image.url }}" alt="Profile Picture" width="100">
+        <p><strong>Username:</strong> {{ recipeuser.username }}</p>
+        <p><strong>Email:</strong> {{ recipeuser.email }}</p>
+        <p><strong>Bio:</strong> {{ recipeuser.bio|default:"No bio yet." }}</p>
+        <p><strong>Date of Birth:</strong> {{ recipeuser.date_of_birth }}</p>
+        <a href="{% url 'update-profile' %}">Update Profile</a>
+    
+    
+</div>
+
+
+{% endblock %}
