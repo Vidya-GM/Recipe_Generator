@@ -64,7 +64,7 @@ def recipeuserUpdate(request):
             return redirect("profile")
         else:
             messages.error(request, "There were errors in your form. Please fix them below.")
-            return render(request, "recipeuser_update.html", {"form": form})
+            return render(request, "recipe_user/recipeuser_update.html", {"form": form})
     else:
         form = RecipeUserUpdateForm(instance=recipeuser)
         return render(request, "recipe_user/recipeuser_update.html", {"form": form})
