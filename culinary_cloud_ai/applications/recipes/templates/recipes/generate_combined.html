@@ -1,47 +1,55 @@
+{% extends "recipes/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>AI Chef — Generate a Recipe</title>
-  <link rel="stylesheet" href="{% static 'css/recipe_form.css' %}">
-</head>
-<body>
-  <h1>AI Chef — Generate a Recipe</h1>
 
-  <form method="post" action="{% url 'recipes:generate_combined' %}">
-    {% csrf_token %}
+{% block title %}AI Chef — Generate a Recipe{% endblock %}
 
-    <div>
-      <label>Choose ingredients</label>
-      <div class="ingredients-grid">
-        {% for checkbox in form.ingredients %}
-          <label>{{ checkbox.tag }} {{ checkbox.choice_label }}</label>
-        {% endfor %}
-      </div>
-    </div>
+{% block content %}
+  <div class="generate-container">
+    <h1 class="page-title">AI Chef — Generate a Recipe</h1>
 
-    <div>
-      {{ form.manual_ingredients.label_tag }}
-      {{ form.manual_ingredients }}
-    </div>
+    <form
+      method="post"
+      action="{% url 'recipes:generate_combined' %}"
+      class="generate-form"
+    >
+      {% csrf_token %}
 
-    <div>
-      {{ form.difficulty.label_tag }}
-      {{ form.difficulty }}
-    </div>
+      <fieldset class="form-section">
+        <legend>Choose Ingredients</legend>
+        <div class="ingredients-grid">
+          {% for checkbox in form.ingredients %}
+            <label class="checkbox-label">
+              {{ checkbox.tag }} {{ checkbox.choice_label }}
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
 
-    <div>
-      {{ form.cuisine.label_tag }}
-      {{ form.cuisine }}
-    </div>
+      <fieldset class="form-section">
+        <legend>Additional Details</legend>
+        <div class="form-row">
+          <div class="form-group">
+            {{ form.manual_ingredients.label_tag }}
+            {{ form.manual_ingredients }}
+          </div>
+          <div class="form-group">
+            {{ form.difficulty.label_tag }}
+            {{ form.difficulty }}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            {{ form.cuisine.label_tag }}
+            {{ form.cuisine }}
+          </div>
+          <div class="form-group">
+            {{ form.cooking_time.label_tag }}
+            {{ form.cooking_time }}
+          </div>
+        </div>
+      </fieldset>
 
-    <div>
-      {{ form.cooking_time.label_tag }}
-      {{ form.cooking_time }}
-    </div>
-
-    <button type="submit">Generate Recipe</button>
-  </form>
-</body>
-</html>
+      <button type="submit" class="btn-submit">Generate Recipe</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest
 from .forms import RecipeInputForm
 from .generators.combined_generator import generate_full_recipe
@@ -16,7 +16,6 @@ class RecipeListView(ListView):
     paginate_by = 12
 
 
-#  RecipeDetailView
 class RecipeDetailView(DetailView):
     model = Recipe
     template_name = "recipes/recipe_detail.html"
@@ -24,34 +23,36 @@ class RecipeDetailView(DetailView):
 
 
 class GenerateCombinedView(View):
-    """Run the full pipeline (text + image) and render a recipe page."""
+    """Run the full pipeline (text + image) and then redirect to the saved recipe."""
 
     def get(self, request):
         form = RecipeInputForm()
-        return render(request, 'recipes/generate_combined.html', {'form': form})
+        return render(request, "recipes/generate_combined.html", {"form": form})
 
     def post(self, request):
         form = RecipeInputForm(request.POST)
         if not form.is_valid():
-            return HttpResponseBadRequest('Form is not valid.')
+            return HttpResponseBadRequest("Form is not valid.")
 
-        # Extract checkbox ingredients (model instances)
-        selected_ingredients = form.cleaned_data['ingredients']  # List of CheckboxIngredient instances
-        manual_ingredients = form.cleaned_data.get('manual_ingredients', '')
-        cooking_time = form.cleaned_data.get('cooking_time')
-        cuisine = form.cleaned_data.get('cuisine')
-        difficulty = form.cleaned_data.get('difficulty')
+        # Gather form data
+        selected_ingredients = form.cleaned_data["ingredients"]
+        manual_ingredients = form.cleaned_data.get("manual_ingredients", "")
+        cooking_time = form.cleaned_data.get("cooking_time")
+        cuisine = form.cleaned_data.get("cuisine")
+        difficulty = form.cleaned_data.get("difficulty")
 
-        # Convert ingredient objects to strings
+        # Build ingredient string
         combined_ingredients = [ing.name for ing in selected_ingredients]
         if manual_ingredients:
             combined_ingredients.append(manual_ingredients)
+        ingredients_str = ", ".join(combined_ingredients)
 
-        ingredients_str = ', '.join(combined_ingredients)
-        cooking_time_str = f"{cooking_time.time_in_minutes}" if cooking_time else "unspecified"
+        cooking_time_str = (
+            f"{cooking_time.time_in_minutes}" if cooking_time else "unspecified"
+        )
         cuisine_str = cuisine.cuisine_name if cuisine else "unspecified"
 
-        # Build the prompt
+        # Build the AI prompt
         prompt = f"""
 You are an AI chef assistant. Generate a complete, structured recipe based on the following constraints.
 Use up to 500 tokens.
@@ -96,17 +97,10 @@ Difficulty: {difficulty}.
 
         try:
             result = generate_full_recipe(prompt)
+            # save_generated_recipe should return the Recipe instance
             recipe = save_generated_recipe(result, user=request.user)
         except Exception as e:
             return HttpResponseBadRequest(f"AI generation error: {e}")
 
-        return render(request, 'recipes/recipe_detail.html', {
-            'title': result.get('title', ''),
-            'description': result.get('description', ''),
-            'ingredients': result.get('ingredients', []),
-            'instructions': result.get('instructions', []),
-            'difficulty': result.get('difficulty', ''),
-            'cuisine': result.get('cuisine', ''),
-            'cooking_time': result.get('cooking_time', ''),
-            'image_url': result.get('image_url') or result.get('local_path'),
-        })
+        # Redirect to the newly created recipe's detail page
+        return redirect(recipe.get_absolute_url())
