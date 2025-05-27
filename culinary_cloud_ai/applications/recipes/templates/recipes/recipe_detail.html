@@ -1,46 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ title }}</title>
-  <style>
-    body { font-family: sans-serif; max-width: 700px; margin: 2em auto; }
-    img { max-width: 100%; margin: 1em 0; }
-    h1, h2, h3 { margin-top: 1.5em; }
-    ul, ol { margin-left: 1.5em; }
-    a { display: inline-block; margin-top: 2em; text-decoration: none; color: #007bff; }
-  </style>
-</head>
-<body>
-  <h1>{{ title }}</h1>
-  <p><em>{{ description }}</em></p>
+{% extends "recipes/base.html" %}
+{% load static %}
 
-  {% if image_url %}
-    <img src="{{ image_url }}" alt="{{ title }}">
-  {% endif %}
+{% block content %}
+  <div class="recipe-detail-container">
+    {% if recipe.recipe_image %}
+      <img
+        src="{{ recipe.recipe_image.url }}"
+        alt="{{ recipe.title }}"
+        class="recipe-detail-image"
+      >
+    {% endif %}
 
-  <h2>Ingredients</h2>
-  <ul>
-    {% for item in ingredients %}
-      <li>{{ item }}</li>
-    {% empty %}
-      <li><em>No ingredients provided.</em></li>
-    {% endfor %}
-  </ul>
+    <div class="recipe-detail-info">
+      <div class="detail-title-pill">{{ recipe.title }}</div>
 
-  <h2>Instructions</h2>
-  <ol>
-    {% for step in instructions %}
-      <li>{{ step }}</li>
-    {% empty %}
-      <li><em>No instructions provided.</em></li>
-    {% endfor %}
-  </ol>
+      {% if recipe.short_description %}
+        <div class="detail-desc-pill">{{ recipe.short_description }}</div>
+      {% endif %}
 
-  <p><strong>Difficulty:</strong> {{ difficulty }}</p>
-  <p><strong>Cuisine:</strong> {{ cuisine }}</p>
-  <p><strong>Cooking Time:</strong> {{ cooking_time }}</p>
+      <div class="detail-details">
+        {% if recipe.description %}
+          <p><strong>Description:</strong> {{ recipe.description }}</p>
+        {% endif %}
 
-  <a href="{% url 'recipes:generate_combined' %}">&larr; Generate Another Recipe</a>
-</body>
-</html>
+        {% if recipe.ingredients %}
+          <h3>Ingredients</h3>
+          <ul>
+            {% for line in recipe.ingredients.splitlines %}
+              <li>{{ line }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if recipe.instructions %}
+          <h3>Instructions</h3>
+          <ol>
+            {% for step in recipe.instructions.splitlines %}
+              <li>{{ step }}</li>
+            {% endfor %}
+          </ol>
+        {% endif %}
+
+        {% if recipe.difficulty %}
+          <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+        {% endif %}
+        {% if recipe.cuisine %}
+          <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
+        {% endif %}
+        {% if recipe.cooking_time %}
+          <p><strong>Time:</strong> {{ recipe.cooking_time }}</p>
+        {% endif %}
+
+        <p><strong>Likes:</strong>    {{ recipe.likes_count }}</p>
+        <p><strong>Comments:</strong> {{ recipe.comments_count }}</p>
+        <p><strong>By:</strong>       {{ recipe.recipe_owner.username }}</p>
+      </div>
+
+      <a href="{% url 'recipes:home' %}" class="back-link">Back to Main Page</a>
+    </div>
+  </div>
+{% endblock %}

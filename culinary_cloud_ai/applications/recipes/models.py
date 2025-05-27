@@ -1,5 +1,6 @@
 # Create your models here.
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -41,6 +42,10 @@ class Recipe(models.Model):
     cuisine = models.ForeignKey(Cuisine, on_delete=models.SET_NULL, null=True, blank=True, related_name="recipes")
     cooking_time = models.ForeignKey(CookingTime, on_delete=models.SET_NULL, null=True, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # Returns the absolute URL for the recipe detail view
+    def get_absolute_url(self):
+        return reverse("recipes:recipe-detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.title
