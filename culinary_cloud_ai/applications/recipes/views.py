@@ -5,8 +5,16 @@ from .forms import RecipeInputForm
 from .generators.combined_generator import generate_full_recipe
 from .query import save_generated_recipe
 
-def home(request):
-    return render(request, "recipes/home.html")
+from django.views.generic import ListView
+from .models import Recipe
+
+
+class RecipeListView(ListView):
+    model = Recipe
+    template_name = "recipes/recipe_list.html"
+    context_object_name = "recipes"
+    paginate_by = 12
+
 
 class GenerateCombinedView(View):
     """Run the full pipeline (text + image) and render a recipe page."""
