@@ -136,6 +136,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# media files
+media/recipes_pic/
+
 # Spyder project settings
 .spyderproject
 .spyproject
