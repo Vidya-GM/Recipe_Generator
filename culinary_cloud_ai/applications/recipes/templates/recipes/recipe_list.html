@@ -1,0 +1,37 @@
+{# extends base; no other blocks here #}
+{% extends "recipes/base.html" %}
+{% load static %}
+{# exactly one content block in child #}
+{% block content %}
+  <div class="recipe-grid">
+    {% for recipe in recipes %}
+      <a href="{{ recipe.get_absolute_url }}" class="recipe-card">
+        {% if recipe.recipe_image %}
+          <img src="{{ recipe.recipe_image.url }}" alt="{{ recipe.title }}">
+        {% else %}
+          <img src="{% static 'images/placeholder.png' %}" alt="No image">
+        {% endif %}
+        <h2>{{ recipe.title }}</h2>
+        <p>{{ recipe.short_description }}</p>
+        <div class="stats">
+          <span>Likes: {{ recipe.likes_count }}</span>
+          <span>Comments: {{ recipe.comments_count }}</span>
+        </div>
+      </a>
+    {% empty %}
+      <p style="margin:1.5rem;">No recipes yet — why not generate one?</p>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <nav class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">← Prev</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next →</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+{% endblock %}
