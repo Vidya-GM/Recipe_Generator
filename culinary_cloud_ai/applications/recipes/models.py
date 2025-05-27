@@ -13,7 +13,6 @@ class CheckboxIngredient(models.Model):
 
 class Cuisine(models.Model):
     cuisine_name = models.CharField(max_length=100, unique=True)
-    cuisine_name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.cuisine_name
