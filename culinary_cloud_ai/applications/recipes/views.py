@@ -5,7 +5,7 @@ from .forms import RecipeInputForm
 from .generators.combined_generator import generate_full_recipe
 from .query import save_generated_recipe
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Recipe
 
 
@@ -14,6 +14,13 @@ class RecipeListView(ListView):
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
     paginate_by = 12
+
+
+#  RecipeDetailView
+class RecipeDetailView(DetailView):
+    model = Recipe
+    template_name = "recipes/recipe_detail.html"
+    context_object_name = "recipe"
 
 
 class GenerateCombinedView(View):
