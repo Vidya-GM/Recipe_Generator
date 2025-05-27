@@ -49,3 +49,28 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Like(models.Model):
+    author = models.ForeignKey("recipe_user.RecipeUser", on_delete=models.CASCADE)
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='likes')
+    liked_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('author', 'recipe')  # Prevents duplicate likes
+
+    def __str__(self):
+        return f"{self.author.username} liked {self.recipe}"
+
+
+class Comment(models.Model):
+    author = models.ForeignKey("recipe_user.RecipeUser", on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="comments")
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.recipe.title}"
+
+    class Meta:
+        ordering = ['-created_at']
