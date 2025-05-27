@@ -58,7 +58,7 @@ class Recipe(models.Model):
         return [like.author for like in self.likes.select_related('user')]
 
     def __str__(self):
-        return self.titl
+        return self.title
 
 
 class Like(models.Model):
