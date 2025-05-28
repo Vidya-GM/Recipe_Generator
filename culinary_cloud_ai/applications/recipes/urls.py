@@ -17,3 +17,4 @@ urlpatterns = [
     path("recipes/<int:pk>/", RecipeDetailView.as_view(), name="recipe-detail"),
     #path('toggle_like/<int:recipe_id>/', toggle_like, name='toggle_like'),
 ]
+
