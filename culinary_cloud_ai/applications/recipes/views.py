@@ -12,47 +12,49 @@ from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Count, Exists, OuterRef, Q
 
 
+def home(request):
+    return render(request, "recipes/home.html")
 class RecipeListView(ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
     paginate_by = 12
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.annotate(likes_count=Count('likes'))
-        user = self.request.user
-        if user.is_authenticated:
-            user_likes = Like.objects.filter(author=user, recipe=OuterRef('pk'))
-            queryset = queryset.annotate(user_liked=Exists(user_likes))
-        else:
-            queryset = queryset.annotate(user_liked=Q(pk__isnull=True))  # always False
-        return queryset
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     queryset = queryset.annotate(likes_count=Count('likes'))
+    #     user = self.request.user
+    #     if user.is_authenticated:
+    #         user_likes = Like.objects.filter(author=user, recipe=OuterRef('pk'))
+    #         queryset = queryset.annotate(user_liked=Exists(user_likes))
+    #     else:
+    #         queryset = queryset.annotate(user_liked=Q(pk__isnull=True))  # always False
+    #     return queryset
 
-@login_required
-def toggle_like(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    user = request.user
+# @login_required
+# def toggle_like(request, recipe_id):
+#     recipe = get_object_or_404(Recipe, id=recipe_id)
+#     user = request.user
     
-    like, created = Like.objects.get_or_create(author=user, recipe=recipe)
-    if not created:
-        # User already liked this recipe, so unlike it
-        like.delete()
+#     like, created = Like.objects.get_or_create(author=user, recipe=recipe)
+#     if not created:
+#         # User already liked this recipe, so unlike it
+#         like.delete()
 
-    return redirect('recipes:recipe-detail', pk=recipe.id)
+#     return redirect('recipes:recipe-detail', pk=recipe.id)
 
 class RecipeDetailView(DetailView):
     model = Recipe
     template_name = "recipes/recipe_detail.html"
     context_object_name = "recipe"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        recipe = self.get_object()
-        context["user_has_liked"] = False
-        if self.request.user.is_authenticated:
-            context["user_has_liked"] = recipe.likes.filter(author=self.request.user).exists()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     recipe = self.get_object()
+    #     context["user_has_liked"] = False
+    #     if self.request.user.is_authenticated:
+    #         context["user_has_liked"] = recipe.likes.filter(author=self.request.user).exists()
+    #     return context
 
 
 class GenerateCombinedView(View):
