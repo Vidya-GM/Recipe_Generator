@@ -51,7 +51,20 @@
           <p><strong>Time:</strong> {{ recipe.cooking_time }}</p>
         {% endif %}
 
-        <p><strong>Likes:</strong>    {{ recipe.likes_count }}</p>
+        <!-- <p><strong>Likes:</strong>    {{ recipe.likes_count }}</p>
+        {% if user.is_authenticated %}
+        <form action="{% url 'recipes:toggle_like' recipe.id %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          {% if user_has_liked %}
+            <button type="submit" class="btn btn-danger">❤️ Unlike</button>
+          {% else %}
+            <button type="submit" class="btn btn-outline-danger">♡ Like</button>
+          {% endif %}
+        </form>
+        {% else %}
+          <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to like this recipe.</p>
+        {% endif %} -->
+        
         <p><strong>Comments:</strong> {{ recipe.comments_count }}</p>
         <p><strong>By:</strong>       {{ recipe.recipe_owner.username }}</p>
       </div>
