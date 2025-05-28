@@ -50,15 +50,15 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
     
-    @property
-    def like_count(self):
-        return self.likes.count()
-    @property
-    def liked_users(self):
-        return [like.author for like in self.likes.select_related('user')]
+    # @property
+    # def like_count(self):
+    #     return self.likes.count()
+    # @property
+    # def liked_users(self):
+    #     return [like.author for like in self.likes.select_related('user')]
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
 
 class Like(models.Model):
