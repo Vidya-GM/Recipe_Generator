@@ -14,9 +14,6 @@ from django.db.models import Count, Exists, OuterRef, Q
 def home(request):
     return render(request, "recipes/home.html")
 
-def home(request):
-    return render(request, "recipes/home.html")
-
 class RecipeListView(ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
