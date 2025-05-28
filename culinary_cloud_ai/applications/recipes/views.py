@@ -9,6 +9,10 @@ from django.views.generic import ListView, DetailView
 from .models import Recipe
 
 
+def home(request):
+    return render(request, "recipes/home.html")
+
+
 class RecipeListView(ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
