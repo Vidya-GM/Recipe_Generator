@@ -2,74 +2,109 @@
 {% load static %}
 
 {% block content %}
-  <div class="recipe-detail-container">
+<div class="recipe-detail-container">
     {% if recipe.recipe_image %}
-      <img
-        src="{{ recipe.recipe_image.url }}"
-        alt="{{ recipe.title }}"
-        class="recipe-detail-image"
-      >
+        <img
+            src="{{ recipe.recipe_image.url }}"
+            alt="{{ recipe.title }}"
+            class="recipe-detail-image"
+        >
     {% endif %}
 
     <div class="recipe-detail-info">
-      <div class="detail-title-pill">{{ recipe.title }}</div>
+        <div class="detail-title-pill">{{ recipe.title }}</div>
 
-      {% if recipe.short_description %}
-        <div class="detail-desc-pill">{{ recipe.short_description }}</div>
-      {% endif %}
-
-      <div class="detail-details">
-        {% if recipe.description %}
-          <p><strong>Description:</strong> {{ recipe.description }}</p>
+        {% if recipe.short_description %}
+            <div class="detail-desc-pill">{{ recipe.short_description }}</div>
         {% endif %}
 
-        {% if recipe.ingredients %}
-          <h3>Ingredients</h3>
-          <ul>
-            {% for line in recipe.ingredients.splitlines %}
-              <li>{{ line }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+        <div class="detail-details">
+            {% if recipe.description %}
+                <p><strong>Description:</strong> {{ recipe.description }}</p>
+            {% endif %}
 
-        {% if recipe.instructions %}
-          <h3>Instructions</h3>
-          <ol>
-            {% for step in recipe.instructions.splitlines %}
-              <li>{{ step }}</li>
-            {% endfor %}
-          </ol>
-        {% endif %}
+            {% if recipe.ingredients %}
+                <h3>Ingredients</h3>
+                <ul>
+                {% for line in recipe.ingredients.splitlines %}
+                    <li>{{ line }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
 
-        {% if recipe.difficulty %}
-          <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
-        {% endif %}
-        {% if recipe.cuisine %}
-          <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
-        {% endif %}
-        {% if recipe.cooking_time %}
-          <p><strong>Time:</strong> {{ recipe.cooking_time }}</p>
-        {% endif %}
+            {% if recipe.instructions %}
+                <h3>Instructions</h3>
+                <ol>
+                {% for step in recipe.instructions.splitlines %}
+                    <li>{{ step }}</li>
+                {% endfor %}
+                </ol>
+            {% endif %}
 
+            {% if recipe.difficulty %}
+                <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
+            {% endif %}
+
+            {% if recipe.cuisine %}
+                <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
+            {% endif %}
+
+            {% if recipe.cooking_time %}
+                <p><strong>Time:</strong> {{ recipe.cooking_time }}</p>
+            {% endif %}
+        <p><strong>By:</strong> {{ recipe.recipe_owner.username }}</p>
+        
+        <hr>
+        
+        <!-- --- Likes --- -->
         <p><strong>Likes:</strong>    {{ recipe.likes_count }}</p>
         {% if user.is_authenticated %}
-        <form action="{% url 'recipes:toggle_like' recipe.id %}" method="post" style="display:inline;">
-          {% csrf_token %}
-          {% if user_has_liked %}
-            <button type="submit" class="btn btn-danger">❤️ Unlike</button>
-          {% else %}
-            <button type="submit" class="btn btn-outline-danger">♡ Like</button>
-          {% endif %}
-        </form>
+            <form action="{% url 'recipes:toggle_like' recipe.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            {% if user_has_liked %}
+                <button type="submit" class="btn btn-danger">❤️ Unlike</button>
+            {% else %}
+                <button type="submit" class="btn btn-outline-danger">♡ Like</button>
+            {% endif %}
+            </form>
         {% else %}
-          <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to like this recipe.</p>
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to like this recipe.</p>
         {% endif %}
         
+        <!-- --- comments_count for the recipe-card -- -->
         <p><strong>Comments:</strong> {{ recipe.comments_count }}</p>
-        <p><strong>By:</strong>       {{ recipe.recipe_owner.username }}</p>
-      </div>
+        
+        <!-- --- Display all Comments -- -->
+        {% for comment in comments %}
+            <div class="comment-box">
+                <div>{{ comment.content }}</div>
+                    <div class="comment-meta">
+                    &nbsp;&nbsp;&nbsp;-- <small><em>By {{ comment.author.username }}</em></small>
+                    <small>({{ comment.created_at|date:"M d, Y H:i" }})</small>
+                </div>
+            </div>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
 
-      <a href="{% url 'recipes:home' %}" class="back-link">Back to Main Page</a>
+        <hr>
+
+        <!-- -- Allow user to comment if authenticated(if logged-in) -- -->
+        {% if user.is_authenticated %}
+            <h3>Add a Comment</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Submit </button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to add a comment.</p>
+        {% endif %}
+
+        </div>
+
+        <a href="{% url 'recipes:home' %}" class="back-link">Back to Main Page</a>
     </div>
-  </div>
+</div>
+
 {% endblock %}
