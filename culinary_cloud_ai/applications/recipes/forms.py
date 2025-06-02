@@ -1,5 +1,5 @@
 from django import forms
-from applications.recipes.models import CookingTime, Cuisine, Recipe, CheckboxIngredient
+from applications.recipes.models import CookingTime, Cuisine, Recipe, CheckboxIngredient, Comment
 
 
 DIFFICULTY_CHOICES = Recipe.DIFFICULTY_CHOICES
@@ -41,3 +41,16 @@ class RecipeInputForm(forms.Form):
         label="Cooking Time",
         empty_label="Select cooking time",
     )
+
+
+class RecipeCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content"]
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 3,        # height
+                'cols': 75,       # width
+                'placeholder': 'Write a comment...',
+            }),
+        }

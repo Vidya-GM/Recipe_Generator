@@ -8,11 +8,12 @@
     {% for recipe in my_recipes %}
         <div>
             <div class="profile-box">
-                
+                <a href="{% url 'recipes:recipe-detail' recipe.pk %}">
                 <p><strong>Title:</strong> {{ recipe.title }}</p>
-                    <img src="{{ recipe.recipe_image.url }}" alt="Recipe_Image" width="100">
-                    
-                    <p><strong>Description:</strong> {{ recipe.description }}</p>
+                <img src="{{ recipe.recipe_image.url }}" alt="Recipe_Image" width="100">
+                </a>
+
+                <p><strong>Description:</strong> {{ recipe.description }}</p>
             </div>
         </div>
     {% endfor %}
