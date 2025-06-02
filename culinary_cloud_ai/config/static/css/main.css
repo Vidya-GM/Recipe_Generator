@@ -309,3 +309,20 @@ html, body {
     flex-direction: column;
   }
 }
+
+/* Comments display */
+.comment-meta {
+    font-family: 'Roboto Mono', monospace;
+    margin-top: 5px;
+    color: #493939;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.comment-box {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-left: 3px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
