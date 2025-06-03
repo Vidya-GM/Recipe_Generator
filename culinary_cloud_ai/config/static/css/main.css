@@ -34,12 +34,6 @@ html, body {
   text-decoration: none;
   /* White text */
   color: #fff;
-  /* Four‐way shadow for a solid outline */
-  text-shadow:
-    -1px -1px 0 #000,
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000;
 }
 
 /* All the other nav links */

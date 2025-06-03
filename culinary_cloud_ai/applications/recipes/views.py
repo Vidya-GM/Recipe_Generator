@@ -31,7 +31,7 @@ class RecipeListView(ListView):
             queryset = queryset.annotate(user_liked=Exists(user_likes))
         else:
             queryset = queryset.annotate(user_liked=Q(pk__isnull=True))  # always False
-        return queryset
+        return queryset.order_by('-created_at')
 
 @login_required
 def toggle_like(request, recipe_id):
