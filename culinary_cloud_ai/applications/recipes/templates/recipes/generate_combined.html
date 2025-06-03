@@ -1,13 +1,84 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}AI Chef — Generate a Recipe{% endblock %}
+{% block title %}Culinary Cloud AI{% endblock %}
 
 {% block content %}
+  {# Full-page loading overlay, hidden by default #}
+  <div id="loading-overlay" class="loading-overlay" style="display:none;">
+    <!-- From Uiverse.io by KSAplay -->
+    <div class="loader">
+      <div class="simple-text">While it's generating you can play with Cubie</div>
+      <div class="cube">
+        <div class="face middle front">
+          <div class="cube cube-front">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+        <div class="face middle back">
+          <div class="cube cube-back">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+        <div class="face middle left">
+          <div class="cube cube-left">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+        <div class="face middle right">
+          <div class="cube cube-right">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+        <div class="face middle top">
+          <div class="cube cube-top">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+        <div class="face middle bottom">
+          <div class="cube cube-bottom">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="generate-container">
     <h1 class="page-title">AI Chef — Generate a Recipe</h1>
 
     <form
+      id="generate-form"
       method="post"
       action="{% url 'recipes:generate_combined' %}"
       class="generate-form"
@@ -16,13 +87,28 @@
 
       <fieldset class="form-section">
         <legend>Choose Ingredients</legend>
-        <div class="ingredients-grid">
-          {% for checkbox in form.ingredients %}
-            <label class="checkbox-label">
-              {{ checkbox.tag }} {{ checkbox.choice_label }}
-            </label>
+
+        <div class="ingredient-category-wrapper">
+          {% for category_label, ing_list in ingredients_by_category %}
+            <div class="ingredient-category">
+              <h3 class="category-title">{{ category_label }}</h3>
+              <div class="ingredients-grid">
+                {% for ing in ing_list %}
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="ingredients"
+                      value="{{ ing.pk }}"
+                      {% if form.is_bound and ing.pk|stringformat:"s" in form.ingredients.value %}checked{% endif %}
+                    >
+                    {{ ing.name }}
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
           {% endfor %}
         </div>
+
       </fieldset>
 
       <fieldset class="form-section">
@@ -52,4 +138,13 @@
       <button type="submit" class="btn-submit">Generate Recipe</button>
     </form>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Show the custom cube loader overlay on form submit
+  document.getElementById('generate-form').addEventListener('submit', function(){
+    document.getElementById('loading-overlay').style.display = 'flex';
+  });
+</script>
 {% endblock %}
