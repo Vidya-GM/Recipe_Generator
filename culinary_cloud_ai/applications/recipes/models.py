@@ -2,14 +2,36 @@
 from django.db import models
 from django.urls import reverse
 
-# Create your models here.
-
 
 class CheckboxIngredient(models.Model):
+    CATEGORY_MEAT = "MEAT"
+    CATEGORY_VEG = "VEG"
+    CATEGORY_FRUIT = "FRUIT"
+    CATEGORY_DAIRY = "DAIRY"
+    CATEGORY_OTHER = "OTHER"
+
+    CATEGORY_CHOICES = [
+        (CATEGORY_MEAT,  "Meat"),
+        (CATEGORY_VEG,   "Veggies"),
+        (CATEGORY_FRUIT, "Fruits"),
+        (CATEGORY_DAIRY, "Dairy"),
+        (CATEGORY_OTHER, "Other"),
+    ]
+
     name = models.CharField(max_length=100, unique=True)
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        default=CATEGORY_OTHER,
+        help_text="Select the category for this ingredient.",
+    )
+
+    class Meta:
+        ordering = ["category", "name"]
 
     def __str__(self):
-        return self.name
+        display = dict(self.CATEGORY_CHOICES).get(self.category, self.category)
+        return f"{self.name} ({display})"
 
 
 class Cuisine(models.Model):
@@ -24,7 +46,7 @@ class CookingTime(models.Model):
 
     def __str__(self):
         return f"{self.time_in_minutes} minutes"
-    
+
 
 class Recipe(models.Model):
     DIFFICULTY_CHOICES = [
