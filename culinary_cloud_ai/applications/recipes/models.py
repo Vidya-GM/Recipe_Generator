@@ -44,6 +44,10 @@ class Cuisine(models.Model):
 class CookingTime(models.Model):
     time_in_minutes = models.PositiveIntegerField(help_text="Time is in minutes", unique=True)
 
+    class Meta:
+        # Always return CookingTime objects in ascending order by time_in_minutes
+        ordering = ["time_in_minutes"]
+
     def __str__(self):
         return f"{self.time_in_minutes} minutes"
 
