@@ -1,8 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
 
+{% block title %}Culinary Cloud AI{% endblock %}
 {% block content %}
 
-<h1>Homepage</h1> 
+<div class="home-hero">
+  <h1>Welcome, {% if user.is_authenticated %}{{ user.username }}{% else %}Chef{% endif %}!</h1>
+  <p>Generate, browse, and share delicious recipes powered by AI.</p>
+  <div class="home-cta">
+    <a href="{% url 'recipes:generate_combined' %}" class="btn-primary">Generate a Recipe</a>
+    <a href="{% url 'recipes:recipe-list' %}"  class="btn-secondary">Browse Recipes</a>
+  </div>
+</div>
 
+<section class="home-features">
+  <div class="feature">
+    <h2>AI-Powered Generation</h2>
+    <p>Tell our AI what you have—and get back a full recipe, from title to instructions.</p>
+  </div>
+  <div class="feature">
+    <h2>Community Sharing</h2>
+    <p>Discover and rate recipes created by fellow food lovers in our community.</p>
+  </div>
+  <div class="feature">
+    <h2>Profile &amp; Favorites</h2>
+    <p>Save your favorite recipes, manage your profile, and come back anytime for more.</p>
+  </div>
+  <div class="feature">
+    <h2>Custom Diets</h2>
+    <p>Generate recipes tailored to vegetarian, vegan, keto, and other diets.</p>
+  </div>
+</section>
 
 {% endblock %}

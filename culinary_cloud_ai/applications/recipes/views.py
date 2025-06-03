@@ -6,10 +6,11 @@ from .generators.combined_generator import generate_full_recipe
 from .query import save_generated_recipe
 
 from django.views.generic import ListView, DetailView
-from .models import Recipe, Like
+from .models import Recipe, Like, CheckboxIngredient
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Count, Exists, OuterRef, Q
+from collections import defaultdict
 
 def home(request):
     return render(request, "recipes/home.html")
@@ -85,7 +86,29 @@ class GenerateCombinedView(View):
 
     def get(self, request):
         form = RecipeInputForm()
-        return render(request, "recipes/generate_combined.html", {"form": form})
+
+        # 1) Fetch all ingredients (already ordered by category, name in Meta)
+        all_ings = CheckboxIngredient.objects.all()
+
+        # 2) Group by human‐readable category label
+        ingredients_by_category = defaultdict(list)
+        for ing in all_ings:
+            cat_label = ing.get_category_display()  # "Meat", "Veggies", etc.
+            ingredients_by_category[cat_label].append(ing)
+
+        # 3) Define the exact order you want:
+        category_order = ["Meat", "Veggies", "Fruits", "Dairy", "Other"]
+
+        # 4) Build a list of (category_label, ingredient_list) in that order:
+        grouped = [
+            (label, ingredients_by_category.get(label, []))
+            for label in category_order
+        ]
+
+        return render(request, "recipes/generate_combined.html", {
+            "form": form,
+            "ingredients_by_category": grouped,
+        })
 
     def post(self, request):
         form = RecipeInputForm(request.POST)

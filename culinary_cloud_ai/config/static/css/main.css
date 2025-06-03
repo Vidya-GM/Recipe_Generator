@@ -1,23 +1,50 @@
 /* static/css/main.css */
 
-/* Reset & Base */
+/* Reset & Base – now with a full‐page background */
 html, body {
   margin: 0;
   padding: 0;
   font-family: system-ui, sans-serif;
-  background: #f7fafc;
+  height: 100%;
+  /* Background image behind everything, tiled or sized */
+  background:
+    url("../images/bg-pattern.jpg") repeat center top,
+    #f7fafc;            /* fallback color */
+  background-size: auto; /* or `cover` if you want one full‐screen image */
   color: #333;
 }
 
-/* Main Navigation Bar */
+/* Main Navigation Bar with Brand + Background */
 .site-nav {
-  background: #ffffff;
+  display: flex;
+  align-items: center;
+  /* your SVG/jpg background + white fallback */
+  background:
+    url("../images/nav-bg.jpg") no-repeat center/cover,
+    #ffffff;
   border-bottom: 1px solid #ccc;
   padding: 0.5rem 1rem;
-  text-align: center;
 }
+
+/* Your project name on the left */
+.site-nav .site-title {
+  margin-right: auto;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  /* White text */
+  color: #fff;
+  /* Four‐way shadow for a solid outline */
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
+/* All the other nav links */
 .site-nav a {
-  margin: 0 1rem;
+  margin: 0 0.75rem;
   color: #333;
   font-weight: 600;
   text-decoration: none;
@@ -33,7 +60,7 @@ html, body {
 
 /* Recipe card */
 .recipe-card {
-  background: #ffffff;
+  background:#ffffff; 
   border-radius: 12px;
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.1),
@@ -258,6 +285,47 @@ html, body {
   border-radius: 4px;
 }
 
+/* ─── Make categories appear side-by-side ─── */
+/* ─── FORCE ALL FIVE CATEGORIES IN ONE ROW ─── */
+
+/* 1) Use a flex‐container on the parent so that categories live in one row */
+fieldset.form-section > .ingredient-category-wrapper {
+  display: flex;
+  flex-wrap: nowrap;          /* no wrapping to a new line */
+  justify-content: space-between;
+  gap: 1%;                    /* small gap between each category */
+}
+
+/* 2) Shrink each category so that 5 fit inside ~100% width */
+.ingredient-category {
+  flex: 0 0 19%;              /* roughly 19% of parent, so 5×19% + gaps ≈ 100% */
+  box-sizing: border-box;
+  margin: 0 !important;       /* remove previous margins that push them down */
+  display: block;             /* or you can keep inline-block, but flex: is enough */
+}
+
+/* 3) Inside each category, keep your existing grid (or adjust as needed) */
+.ingredient-category .ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* 4) Ensure each label fills its “cell” if you like */
+.ingredient-category .checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+
 /* Two-column layout for details fields */
 .form-row {
   display: grid;
@@ -309,6 +377,256 @@ html, body {
     flex-direction: column;
   }
 }
+
+
+/* --------- Home Page Styling --------- */
+
+.home-hero {
+  width: calc(100% - 4rem);
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  /* put the image behind your white “card” */
+  background:
+    url("../images/bg-pattern.jpg") no-repeat center/cover,
+    #ffffff;  /* fallback color */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  tergb(70, 26, 26)n: center;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.1),
+    0 1px 2px rgba(0,0,0,0.06);
+}
+
+.home-hero h1 {
+  margin: 0 0 1rem;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.home-hero p {
+  margin: 0 0 1.5rem;
+  font-size: 1.125rem;
+  color: #555;
+}
+
+.home-cta {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.home-cta .btn-primary,
+.home-cta .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.home-cta .btn-primary {
+  background: #333;
+  color: #fff;
+  border: none;
+}
+
+.home-cta .btn-secondary {
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.home-cta .btn-primary:hover,
+.home-cta .btn-secondary:hover {
+  opacity: 0.9;
+}
+
+.home-features {
+  display: grid;
+  /* was repeat(auto-fill, minmax(240px, 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  width: calc(100% - 4rem);
+  max-width: 1000px;
+  margin: 2rem auto;
+}
+
+
+.feature {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.1),
+    0 1px 2px rgba(0,0,0,0.06);
+}
+
+.feature h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.feature p {
+  margin: 0.5rem 0 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Responsive stacking */
+@media (max-width: 700px) {
+  .home-hero,
+  .home-features {
+    width: calc(100% - 2rem);
+  }
+  .home-hero h1 {
+    font-size: 2rem;
+  }
+  .home-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ---------- Uiverse Cube Loader ---------- */
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* From Uiverse.io by KSAplay */ 
+.loader {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simple-text {
+  position: absolute;
+  top: -100px;
+  color: white;
+  width: 200px;
+  text-align: center;
+}
+
+.cube {
+  position: absolute;
+  width: 40px;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+  transition: 300ms ease;
+  cursor: pointer;
+  animation: rotateCube 10s infinite linear;
+}
+/* change the distance between cubes with translateX */
+.cube-front,
+.cube-back {
+  transform: translateX(40px) translateZ(-20px);
+  animation: none;
+}
+/* change the distance between cubes with translateZ */
+.cube-top,
+.cube-bottom {
+  transform: translateZ(20px);
+  animation: none;
+}
+/* change the distance between cubes with translateX */
+.cube-left,
+.cube-right {
+  transform: translateX(40px) translateZ(-20px);
+  animation: none;
+}
+
+.face {
+  position: absolute;
+  transform-style: preserve-3d;
+  width: 40px;
+  height: 40px;
+  background: rgb(21, 46, 75);
+  background: radial-gradient(
+    circle,
+    rgba(21, 46, 75, 1) 0%,
+    rgba(10, 14, 55, 1) 100%
+  );
+}
+
+.front {
+  transform: rotateY(0deg) translateZ(20px);
+}
+
+.back {
+  transform: rotateY(180deg) translateZ(20px);
+}
+
+.left {
+  transform: rotateY(-90deg) translateZ(20px);
+}
+
+.right {
+  transform: rotateY(90deg) translateZ(20px);
+}
+
+.top {
+  transform: rotateX(90deg) translateZ(20px);
+}
+
+.bottom {
+  transform: rotateX(-90deg) translateZ(20px);
+}
+
+.cube-back:hover .face,
+.cube-front:hover .face,
+.cube-top:hover .face,
+.cube-bottom:hover .face,
+.cube-left:hover .face,
+.cube-right:hover .face {
+  background: rgb(255, 255, 255);
+  background: radial-gradient(circle, white 60%, rgb(157, 208, 255) 100%);
+  filter: drop-shadow(0px 0px 5px #e7faff)
+    drop-shadow(0px 0px 15px rgb(75, 168, 255))
+    drop-shadow(0px 0px 30px rgb(50, 156, 255));
+}
+
+.cube:active {
+  transform: translateX(0px) translateZ(-20px);
+}
+
+.cube-back:active .face,
+.cube-front:active .face,
+.cube-top:active .face,
+.cube-bottom:active .face,
+.cube-left:active .face,
+.cube-right:active .face {
+  background: rgb(255, 255, 255);
+  background: radial-gradient(circle, white 60%, rgb(157, 208, 255) 100%);
+  filter: drop-shadow(0px 0px 5px #e7faff)
+    drop-shadow(0px 0px 15px rgb(75, 168, 255))
+    drop-shadow(0px 0px 30px rgb(50, 156, 255));
+}
+
+.middle {
+  background: transparent;
+}
+
+@keyframes rotateCube {
+  0% {
+    transform: rotateX(-30deg) rotateY(45deg);
+  }
+  100% {
+    transform: rotateX(-30deg) rotateY(405deg);
+  }
+}
+
 
 /* Comments display */
 .comment-meta {
