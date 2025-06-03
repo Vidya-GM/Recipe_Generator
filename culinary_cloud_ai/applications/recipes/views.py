@@ -1,7 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest
-from .forms import RecipeInputForm
+from .forms import RecipeInputForm, RecipeCommentForm
 from .generators.combined_generator import generate_full_recipe
 from .query import save_generated_recipe
 
@@ -13,6 +13,7 @@ from django.db.models import Count, Exists, OuterRef, Q
 
 def home(request):
     return render(request, "recipes/home.html")
+
 
 class RecipeListView(ListView):
     model = Recipe
@@ -35,13 +36,14 @@ class RecipeListView(ListView):
 def toggle_like(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     user = request.user
-    
+
     like, created = Like.objects.get_or_create(author=user, recipe=recipe)
     if not created:
         # User already liked this recipe, so unlike it
         like.delete()
 
     return redirect('recipes:recipe-detail', pk=recipe.id)
+
 
 class RecipeDetailView(DetailView):
     model = Recipe
@@ -51,10 +53,31 @@ class RecipeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         recipe = self.get_object()
+
+        # Comments context
+        context["comments"] = recipe.comments.all().order_by("-created_at")
+        context["form"] = RecipeCommentForm()
+
+        # Likes context
         context["user_has_liked"] = False
         if self.request.user.is_authenticated:
             context["user_has_liked"] = recipe.likes.filter(author=self.request.user).exists()
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = RecipeCommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.recipe = self.object
+            comment.author = request.user
+            comment.save()
+            return redirect("recipes:recipe-detail", pk=self.object.pk)
+        else:
+            context = self.get_context_data()
+            context["form"] = form
+            return self.render_to_response(context)
 
 
 class GenerateCombinedView(View):
