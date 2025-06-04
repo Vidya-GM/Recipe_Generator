@@ -1,5 +1,5 @@
 from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseBadRequest
 from .forms import RecipeInputForm, RecipeCommentForm
 from .generators.combined_generator import generate_full_recipe
@@ -8,12 +8,19 @@ from .query import save_generated_recipe
 from django.views.generic import ListView, DetailView
 from .models import Recipe, Like, CheckboxIngredient
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Count, Exists, OuterRef, Q
 from collections import defaultdict
 
+
 def home(request):
-    return render(request, "recipes/home.html")
+    # 15 newest recipes
+    newest_recipes = Recipe.objects.all().order_by('-created_at')[:10]
+    # 15 oldest recipes
+    oldest_recipes = Recipe.objects.all().order_by('created_at')[:10]
+    return render(request, 'recipes/home.html', {
+        'newest_recipes': newest_recipes,
+        'oldest_recipes': oldest_recipes,
+    })
 
 
 class RecipeListView(ListView):
