@@ -338,7 +338,7 @@ html, body {
 }
 
 .ingredient-category .checkbox-label:hover {
-  background: #edf2f7;      /* slightly darker on hover */
+  background: #84d2ff;      /* slightly darker on hover */
   border-color: #cbd5e0;
 }
 
@@ -756,6 +756,95 @@ html, body {
     border-radius: 5px;
 }
 
+
+
+/* ─────────────────────────────────────────────────────────────────
+   1) Marquee Container (viewport)
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 180px;      /* must match your .marquee-card height */
+  margin: 2rem auto;
+  /* no background here—transparent edges will show whatever’s behind */
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   2) Apply a mask on the container so the ends fade to transparent
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-container {
+
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0)   0px,                    /* start fully transparent at left edge */
+    rgba(0, 0, 0, 0)   100px,                  /* remain transparent until 100px */
+    rgba(0, 0, 0, 1)   200px,                  /* at 200px, switch to fully opaque */
+    rgba(0, 0, 0, 1)   calc(100% - 200px),     /* stay opaque until 200px from right edge */
+    rgba(0, 0, 0, 0)   calc(100% - 100px),     /* fade back to transparent over next 100px */
+    rgba(0, 0, 0, 0)   100%                    /* remain transparent at far right edge */
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0)   0px,                    
+    rgba(0, 0, 0, 0)   100px,                 
+    rgba(0, 0, 0, 1)   200px,                 
+    rgba(0, 0, 0, 1)   calc(100% - 200px),    
+    rgba(0, 0, 0, 0)   calc(100% - 100px),    
+    rgba(0, 0, 0, 0)   100%                   
+  );
+  mask-size: 100% 100%;       /* apply mask across entire width/height */
+  -webkit-mask-size: 100% 100%; 
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   3) Marquee Track (inline-block, no wrapping)
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;               /* one continuous line */
+  animation: marquee-scroll 40s linear infinite;
+  position: relative;
+  z-index: 1;                        /* beneath the container’s mask */
+}
+
+/* To reverse direction on a second marquee: */
+.marquee-track--reverse {
+  animation-direction: reverse;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   4) Individual Card inside the track
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-card {
+  display: inline-block;
+  vertical-align: top;
+  width: 240px;           /* card width */
+  height: 180px;          /* card height */
+  margin-right: 0.5rem;   /* gap between cards */
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.marquee-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   5) Keyframes: shift track left by 50% of its own width
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+
+
 /* Enhanced search bar styling */
 .search-bar {
   display: flex;
@@ -789,3 +878,4 @@ html, body {
 .search-bar button:hover {
   background-color: #555;
 }
+
