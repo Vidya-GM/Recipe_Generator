@@ -17,14 +17,14 @@ class RecipeInputForm(forms.Form):
     manual_ingredients = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 2}),
         required=False,
-        label="Or enter ingredients manually"
+        label="Ingredients or preferences"
     )
 
     difficulty = forms.ChoiceField(
         choices=Recipe.DIFFICULTY_CHOICES,
         required=True,
         initial="Medium",
-        label="Choose a difficulty",
+        label="Difficulty",
     
     )
 

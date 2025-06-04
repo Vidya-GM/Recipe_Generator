@@ -226,8 +226,6 @@ html, body {
 
 /* ───────────────────────────────────────────────────────────────
    Modern “Generate a Recipe” Page Styles
-   Paste this entire block at the end of your static/css/main.css
-   and replace your old generate‐form CSS with this.
    ─────────────────────────────────────────────────────────────── */
 
 /* ------------- Wrapper & Page Title ------------- */
@@ -402,8 +400,14 @@ html, body {
 
 .form-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
+  justify-content: center;   /* center both buttons */
+  gap: 10rem;                  /* small gap between them */
+  margin-top: 1.5rem;         /* keep some breathing room above */
+}
+
+/* Make each button a bit narrower so they sit neatly */
+.form-actions .btn {
+  min-width: 140px; /* or whatever feels right */
 }
 
 .form-actions .btn {
