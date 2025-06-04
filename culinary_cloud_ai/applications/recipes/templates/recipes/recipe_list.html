@@ -2,6 +2,12 @@
 {% load static %}
 
 {% block content %}
+
+  <form class="search-bar" method="GET" action="/search">
+    <input type="text" name="q" placeholder="Search recipes..." />
+    <button type="submit">Search</button>
+  </form>
+
   <div class="recipe-grid">
     {% for recipe in recipes %}
       {# include the card for each recipe #}
