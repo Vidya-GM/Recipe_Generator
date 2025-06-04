@@ -4,10 +4,10 @@ from django.http import HttpResponseBadRequest
 from .forms import RecipeInputForm, RecipeCommentForm
 from .generators.combined_generator import generate_full_recipe
 from .query import save_generated_recipe
-
-from django.views.generic import ListView, DetailView
-from .models import Recipe, Like, CheckboxIngredient
+from django.views.generic import ListView, DetailView, DeleteView
+from .models import Recipe, Like, CheckboxIngredient, Comment
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count, Exists, OuterRef, Q
 from collections import defaultdict
 
@@ -31,6 +31,15 @@ class RecipeListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        q = self.request.GET.get("q")
+        if q:
+            queryset = queryset.filter(
+                Q(title__icontains=q) |
+                Q(description__icontains=q) |
+                Q(ingredients__icontains=q)
+            )
+
         queryset = queryset.annotate(likes_count=Count('likes'))
         user = self.request.user
         if user.is_authenticated:
@@ -86,6 +95,35 @@ class RecipeDetailView(DetailView):
             context = self.get_context_data()
             context["form"] = form
             return self.render_to_response(context)
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = "recipes/recipe_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comment = self.get_object()
+        recipe = comment.recipe
+
+        context["recipe"] = recipe
+        context["comments"] = recipe.comments.all().order_by("-created_at")
+        context["form"] = RecipeCommentForm()
+        context["user_has_liked"] = False
+        if self.request.user.is_authenticated:
+            context["user_has_liked"] = recipe.likes.filter(author=self.request.user).exists()
+
+        # Add a flag to show confirmation UI
+        context["comment_to_delete"] = comment
+        return context
+
+    def get_success_url(self):
+        return self.object.recipe.get_absolute_url()
+
+    def test_func(self):
+        comment = self.get_object()
+        user = self.request.user
+        return comment.author == user or comment.recipe.recipe_owner == user
 
 
 class GenerateCombinedView(View):
