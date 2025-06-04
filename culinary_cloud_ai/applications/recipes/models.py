@@ -49,7 +49,7 @@ class CookingTime(models.Model):
         ordering = ["time_in_minutes"]
 
     def __str__(self):
-        return f"{self.time_in_minutes} minutes"
+        return f"{self.time_in_minutes} min"
 
 
 class Recipe(models.Model):

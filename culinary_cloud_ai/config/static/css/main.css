@@ -226,8 +226,6 @@ html, body {
 
 /* ───────────────────────────────────────────────────────────────
    Modern “Generate a Recipe” Page Styles
-   Paste this entire block at the end of your static/css/main.css
-   and replace your old generate‐form CSS with this.
    ─────────────────────────────────────────────────────────────── */
 
 /* ------------- Wrapper & Page Title ------------- */
@@ -402,8 +400,14 @@ html, body {
 
 .form-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
+  justify-content: center;   /* center both buttons */
+  gap: 10rem;                  /* small gap between them */
+  margin-top: 1.5rem;         /* keep some breathing room above */
+}
+
+/* Make each button a bit narrower so they sit neatly */
+.form-actions .btn {
+  min-width: 140px; /* or whatever feels right */
 }
 
 .form-actions .btn {
@@ -750,4 +754,38 @@ html, body {
     border-left: 3px solid #ccc;
     background-color: #f9f9f9;
     border-radius: 5px;
+}
+
+/* Enhanced search bar styling */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 320px;
+}
+
+.search-bar input[type="text"] {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px 0 0 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar button {
+  padding: 0.5rem 0.9rem;
+  background-color: rgb(9, 144, 197);
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #555;
 }

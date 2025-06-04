@@ -26,6 +26,15 @@ class RecipeListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        q = self.request.GET.get("q")
+        if q:
+            queryset = queryset.filter(
+                Q(title__icontains=q) |
+                Q(description__icontains=q) |
+                Q(ingredients__icontains=q)
+            )
+
         queryset = queryset.annotate(likes_count=Count('likes'))
         user = self.request.user
         if user.is_authenticated:
