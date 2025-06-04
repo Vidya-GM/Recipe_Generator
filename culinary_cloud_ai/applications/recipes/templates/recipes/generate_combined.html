@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Culinary Cloud AI{% endblock %}
+{% block title %}AI Chef — Generate a Recipe{% endblock %}
 
 {% block content %}
   {# Full-page loading overlay, hidden by default #}
   <div id="loading-overlay" class="loading-overlay" style="display:none;">
-    <!-- From Uiverse.io by KSAplay -->
+    <!-- Loader markup -->
     <div class="loader">
-      <div class="simple-text">While it's generating you can play with Cubie</div>
+      <div class="simple-text">While it's generating, you can play with Cubie</div>
       <div class="cube">
         <div class="face middle front">
           <div class="cube cube-front">
@@ -75,7 +75,7 @@
   </div>
 
   <div class="generate-container">
-    <h1 class="page-title">AI Chef — Generate a Recipe</h1>
+    <h1 class="page-title">Culinary Cloud — Generate a Recipe</h1>
 
     <form
       id="generate-form"
@@ -85,9 +85,9 @@
     >
       {% csrf_token %}
 
+      <!-- Choose Ingredients Section -->
       <fieldset class="form-section">
         <legend>Choose Ingredients</legend>
-
         <div class="ingredient-category-wrapper">
           {% for category_label, ing_list in ingredients_by_category %}
             <div class="ingredient-category">
@@ -108,9 +108,9 @@
             </div>
           {% endfor %}
         </div>
-
       </fieldset>
 
+      <!-- Additional Details Section -->
       <fieldset class="form-section">
         <legend>Additional Details</legend>
         <div class="form-row">
@@ -135,14 +135,18 @@
         </div>
       </fieldset>
 
-      <button type="submit" class="btn-submit">Generate Recipe</button>
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <a href="{% url 'recipes:home' %}" class="btn btn-secondary">Back to Main Page</a>
+        <button type="submit" class="btn btn-primary">Generate Recipe</button>
+      </div>
     </form>
   </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  // Show the custom cube loader overlay on form submit
+  // Show the loader overlay on form submit
   document.getElementById('generate-form').addEventListener('submit', function(){
     document.getElementById('loading-overlay').style.display = 'flex';
   });

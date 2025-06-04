@@ -5,13 +5,16 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: system-ui, sans-serif;
-  height: 100%;
+  min-height: 100vh;
   /* Background image behind everything, tiled or sized */
   background:
     url("../images/bg-pattern.jpg") repeat center top,
     #f7fafc;            /* fallback color */
   background-size: auto; /* or `cover` if you want one full‐screen image */
   color: #333;
+  background-repeat: repeat-y, repeat-y;
+  background-position: center top, center 100vh;
+  background-size: cover, cover;
 }
 
 /* Main Navigation Bar with Brand + Background */
@@ -221,148 +224,247 @@ html, body {
 }
 
 
+/* ───────────────────────────────────────────────────────────────
+   Modern “Generate a Recipe” Page Styles
+   Paste this entire block at the end of your static/css/main.css
+   and replace your old generate‐form CSS with this.
+   ─────────────────────────────────────────────────────────────── */
 
-/* ------------- Generate Form Full-Page Layout ------------- */
+/* ------------- Wrapper & Page Title ------------- */
 
-/* Outer card container spans full width (with padding) */
 .generate-container {
-  width: calc(100% - 4rem);
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  max-width: 1200px;            /* limit how wide the form can grow */
+  margin: 2rem auto;            /* center horizontally with vertical spacing */
+  padding: 2rem 1rem;           /* horizontal padding on narrow screens */
+  background: #ffffff;          /* white background for the entire card */
+  border: 1px solid #ddd;       /* light gray border */
+  border-radius: 8px;           /* rounded corners */
   box-shadow:
-    0 1px 3px rgba(0,0,0,0.1),
-    0 1px 2px rgba(0,0,0,0.06);
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-/* Page title */
-.page-title {
+.generate-container .page-title {
   margin: 0 0 1.5rem;
   font-size: 2rem;
+  font-weight: 700;
   text-align: center;
-  color: #333;
+  color: #2d3748;               /* dark gray/charcoal */
 }
 
-/* The form itself stacks vertically */
-.generate-form {
+/* ------------- Fieldset (Form Section) ------------- */
+
+.form-section {
+  background: #fafafa;                    /* subtle off‐white background */
+  border: 1px solid #e2e8f0;              /* very light gray‐blue border */
+  border-radius: 8px;                     /* more rounded corners */
+  padding: 1.5rem 2rem;                   /* extra internal breathing room */
+  margin-bottom: 2rem;                    /* space between fieldsets */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* faint shadow to lift the entire section */
+  position: relative;
+}
+
+.form-section legend {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  padding: 0 0.5rem;   /* offset from the border */
+  margin-left: 1rem;   /* shift legend text in from left edge */
+  background: #fafafa; /* matches fieldset background */
+}
+
+/* ------------- Ingredient Categories Wrapper ------------- */
+
+.ingredient-category-wrapper {
+  display: flex;
+  flex-wrap: nowrap;       /* keep all categories on one row */
+  justify-content: space-between;
+  gap: 1%;                 /* small gutter between cards */
+  margin-top: 1rem;        /* space under legend */
+}
+
+/* ------------- Individual Category “Card” ------------- */
+
+.ingredient-category {
+  flex: 0 0 19%;           /* ~19% width, so 5 cards + gaps ≈ 100% */
+  background: #ffffff;     /* white “card” background */
+  border-radius: 8px;      /* rounded corners */
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 1rem;           /* inner padding */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.ingredient-category:hover {
+  transform: translateY(-3px); /* slight lift on hover */
+}
+
+/* ------------- Category Title Inside Card ------------- */
+
+.ingredient-category .category-title {
+  margin: 0 0 0.75rem;           /* breathing room below title */
+  font-size: 1.125rem;           /* slightly larger text */
+  font-weight: 600;              /* semibold for emphasis */
+  color: #2d3748;                /* dark gray */
+  border-bottom: 1px solid #e2e8f0;  /* subtle underline */
+  padding-bottom: 0.25rem;       /* space between text and underline */
+}
+
+/* ------------- Grid of Checkboxes Inside Each Card ------------- */
+
+.ingredient-category .ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.75rem;             /* slightly larger gap between items */
+  margin-top: 0.25rem;      /* small gap under category title */
+  flex-grow: 1;             /* allow grid to expand if needed */
+}
+
+/* ------------- Individual Checkbox Label ------------- */
+
+.ingredient-category .checkbox-label {
+  display: flex;
+  align-items: center;
+  background: #f7fafc;      /* very light gray-blue */
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  width: 100%;              /* fill the card’s width */
+  box-sizing: border-box;
+}
+
+.ingredient-category .checkbox-label:hover {
+  background: #edf2f7;      /* slightly darker on hover */
+  border-color: #cbd5e0;
+}
+
+.ingredient-category .checkbox-label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.1);
+}
+
+/* ------------- Additional Details: Two‐Column Form Rows ------------- */
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;                 /* space between columns */
+  margin-top: 1rem;          /* breathing room under previous element */
+}
+
+.form-group {
   display: flex;
   flex-direction: column;
 }
 
-/* Fieldset grouping */
-.form-section {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.form-section legend {
-  padding: 0 .5rem;
-  font-weight: 600;
-}
-
-/* Grid layout for checkboxes */
-.ingredients-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  background: #fafafa;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-/* ─── Make categories appear side-by-side ─── */
-/* ─── FORCE ALL FIVE CATEGORIES IN ONE ROW ─── */
-
-/* 1) Use a flex‐container on the parent so that categories live in one row */
-fieldset.form-section > .ingredient-category-wrapper {
-  display: flex;
-  flex-wrap: nowrap;          /* no wrapping to a new line */
-  justify-content: space-between;
-  gap: 1%;                    /* small gap between each category */
-}
-
-/* 2) Shrink each category so that 5 fit inside ~100% width */
-.ingredient-category {
-  flex: 0 0 19%;              /* roughly 19% of parent, so 5×19% + gaps ≈ 100% */
-  box-sizing: border-box;
-  margin: 0 !important;       /* remove previous margins that push them down */
-  display: block;             /* or you can keep inline-block, but flex: is enough */
-}
-
-/* 3) Inside each category, keep your existing grid (or adjust as needed) */
-.ingredient-category .ingredients-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-/* 4) Ensure each label fills its “cell” if you like */
-.ingredient-category .checkbox-label {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  background: #fafafa;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-
-
-/* Two-column layout for details fields */
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
 .form-group label {
-  display: block;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
   margin-bottom: 0.5rem;
 }
+
 .generate-form select,
 .generate-form textarea,
 .generate-form input[type="text"],
 .generate-form input[type="number"] {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
   font-size: 1rem;
+  color: #2d3748;
+  background: #f7fafc;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Submit button aligned left, styled to match site buttons */
-.btn-submit {
-  margin-top: 1.5rem;
+.generate-form select:focus,
+.generate-form textarea:focus,
+.generate-form input[type="text"]:focus,
+.generate-form input[type="number"]:focus {
+  outline: none;
+  border-color: #3182ce;           /* blue outline on focus */
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+}
+
+.generate-form textarea {
+  min-height: 120px;
+  resize: vertical;    /* allow vertical resizing */
+}
+
+/* ------------- Form Action Buttons ------------- */
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.form-actions .btn {
+  font-size: 1rem;
+  font-weight: 600;
   padding: 0.75rem 1.5rem;
-  background: #333;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
   cursor: pointer;
-  align-self: flex-start;
-}
-.btn-submit:hover {
-  opacity: 0.9;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-/* Mobile responsiveness */
+.form-actions .btn.btn-secondary {
+  background: #edf2f7;         /* light gray‐blue background */
+  color: #4a5568;              /* dark gray text */
+  border: 1px solid #cbd5e0;   /* subtle border */
+}
+
+.form-actions .btn.btn-secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.form-actions .btn.btn-primary {
+  background: #3182ce;         /* brand‐blue background */
+  color: #ffffff;              /* white text */
+  border: 1px solid #3182ce;
+}
+
+.form-actions .btn.btn-primary:hover {
+  background: #2b6cb0;         /* slightly darker blue on hover */
+  transform: translateY(-2px);
+}
+
+/* Disable resizing and lock in a fixed height for the manual‐ingredients textarea */
+.generate-form textarea {
+  resize: none;         /* turn off the drag‐to‐resize handle */
+  height: 120px;        /* pick whatever fixed height you prefer */
+  max-height: 120px;    /* prevent it from growing taller */
+  min-height: 120px;    /* prevent it from shrinking shorter */
+  width: 100%;          /* remain full-width of its container */
+  box-sizing: border-box;
+}
+
+
+/* ------------- Responsive Adjustments ------------- */
+
+@media (max-width: 1024px) {
+  .ingredient-category-wrapper {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .ingredient-category {
+    flex: 1 1 100%;
+  }
+}
+
 @media (max-width: 700px) {
   .generate-container {
-    width: calc(100% - 2rem);
+    max-width: calc(100% - 2rem);
     margin: 1rem auto;
     padding: 1rem;
   }
@@ -370,7 +472,18 @@ fieldset.form-section > .ingredient-category-wrapper {
     display: flex;
     flex-direction: column;
   }
+  .form-group {
+    width: 100%;
+  }
+  .form-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .form-actions .btn {
+    width: 100%;
+  }
 }
+
 
 
 /* --------- Home Page Styling --------- */
