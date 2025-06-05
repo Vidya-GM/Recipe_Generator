@@ -756,6 +756,120 @@ html, body {
     border-radius: 5px;
 }
 
+/* -------------------------Style for recipe-User----- -------------------------- */
+/* -----------------------------recipe-User-Profile -------------------------- */
+/* Profile box */
+
+.profile-box {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+.profile-box h2 {
+    margin-top: 0;
+    text-align: center;
+}
+.profile-box p {
+    line-height: 1.6;
+}
+
+/* -----------------------------recipe-User-Login -------------------------- */
+/* Main form container */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 60px); /* Adjust based on your navbar height */
+    padding-top: 40px;
+    background-color: #f5f5f5;
+}
+
+/* Form box styling */
+.form-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    position: relative;  /* needed if z-index used */
+    z-index: 5;
+}
+
+/* Form elements */
+.form-box form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-box input[type="text"],
+.form-box input[type="email"],
+.form-box input[type="password"] {
+    padding: 10px;
+    margin-bottom: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-box button {
+    padding: 10px 20px;
+    background-color: #197cb6;         /* Green color */
+    border: none;
+    color: white;
+    border-radius: 7px;
+    font-size: 19px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-box button:hover {
+    background-color: #072647;
+}
+
+/* -----------------------------recipe-User-Registration -------------------------- */
+
+.registration-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+.registration-box h2 {
+    margin-top: 0;
+    text-align: center;
+}
+.registration-box p {
+    line-height: 1.6;
+}
+
+.registration-box button {
+    padding: 10px 20px;
+    background-color: #2981b4;         /* Green color */
+    border: none;
+    color: white;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.registration-box button:hover {
+    background-color: #072647;
+}
+
 
 
 /* ─────────────────────────────────────────────────────────────────
