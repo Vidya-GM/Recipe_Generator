@@ -5,27 +5,26 @@
 
     {% if messages %}
         {% for message in messages %}
-        <div class="alert -{{ message.tags }}">
+        <div class="alert -{{ message.tags }}" style="text-align: center;">
             {{ message }}
         </div>
     {% endfor %}
     {% endif %}
+    <!-- css for box -->
+    <div class="form-container">
+        <div class="form-box">
+            <h2>Recipe_User Login</h2> 
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">login</button>
+            </form>
+            <br>
 
-
-<h1>Recipe_User Login</h1> 
-        <!-- css for box -->
-    <div class="login-box">
-    <!-- Search Form -->
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">login</button>
-        </form>
+            <div class="signup-cta">
+                Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+            </div>
+        </div>
     </div>
-    <br>
-    <div class="signup-cta">
-        Don't have an account? <a href="{% url 'register' %}">Sign up</a>
-    </div>
 
-    <!-- <h3> Dont have an account? <a href="{% url 'register' %}">Sign-up</a></h3> -->
 {% endblock %}
