@@ -74,5 +74,5 @@ def myRecipes(request):
     recipeuser = request.user
     my_recipes = recipeuser.recipe_set.all()
     print(my_recipes)
-    return render(request, "recipe_user/my_recipes.html", {"my_recipes": my_recipes,
+    return render(request, "recipe_user/my_recipe_list.html", {"my_recipes": my_recipes,
                                                             "recipeuser": recipeuser})
