@@ -994,6 +994,55 @@ html, body {
 }
 
 
+.search-sort-container {
+  display: flex;
+  justify-content: center; /* keeps content centered */
+  align-items: center;
+  flex-wrap: wrap; /* allows stacking on small screens */
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sort-form {
+  width: 214px; /* half of search bar */
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sort-form select {
+  padding: 0.5rem 0.5rem;
+  border: none;
+  font-size: 0.9rem;
+  outline: none;
+  flex: 1 1 auto; /* flexible */
+  cursor: pointer;
+  background-color: white;
+  border-radius: 8px 0 0 8px;
+  min-width: 0; /* allow shrinking */
+}
+
+.sort-form button {
+  padding: 0.5rem 0.9rem; /* wider padding for button */
+  min-width: 60px; /* fix min width so button doesn't get too small */
+  background-color: rgb(9, 144, 197);
+  color: white;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border-radius: 0 8px 8px 0;
+}
+
+.sort-form button:hover {
+  background-color: #555;
+}
+
+
+
 
 /* Enhanced like button styling */
 

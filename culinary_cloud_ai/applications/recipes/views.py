@@ -40,14 +40,25 @@ class RecipeListView(ListView):
                 Q(ingredients__icontains=q)
             )
 
-        queryset = queryset.annotate(likes_count=Count('likes'))
+        queryset = queryset.annotate(
+            likes_count=Count('likes', distinct=True),
+            annotated_comments_count=Count('comments', distinct=True)
+    )
         user = self.request.user
         if user.is_authenticated:
             user_likes = Like.objects.filter(author=user, recipe=OuterRef('pk'))
             queryset = queryset.annotate(user_liked=Exists(user_likes))
         else:
             queryset = queryset.annotate(user_liked=Q(pk__isnull=True))  # always False
-        return queryset.order_by('-created_at')
+
+        sort_option = self.request.GET.get("sort", "-created_at")
+
+        allowed_sorts = ["-created_at", "created_at", "-likes_count", "-annotated_comments_count"]
+        if sort_option in allowed_sorts:
+            queryset = queryset.order_by(sort_option)
+        else:
+            queryset = queryset.order_by("-created_at")
+        return queryset
 
 @login_required
 def toggle_like(request, recipe_id):
