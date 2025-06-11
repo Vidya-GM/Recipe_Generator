@@ -15,7 +15,7 @@
     <div class="recipe-grid">
         {% for recipe in my_recipes %}
         {# include the card for each recipe #}
-        {% include "recipes/recipe_container.html" %}
+        {% include "recipe_user/recipe_container.html" %}
         {% empty %}
         <p style="margin:1.5rem;">No recipes yet — why not generate one?</p>
         {% endfor %}
