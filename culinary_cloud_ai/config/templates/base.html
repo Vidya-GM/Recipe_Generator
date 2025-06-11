@@ -22,6 +22,11 @@
         <a href="{% url 'logout' %}">Logout</a>
         <a href="{% url 'profile' %}">Profile</a>
         <a href="{% url 'my-recipes' %}">My Recipes</a>
+        <a href="{% url 'notification-list' %}">Notifications
+            {% if unread_notif_count > 0 %}
+                <span class="notification-badge">{{ unread_notif_count }}</span>
+            {% endif %}
+        </a>
       {% else %}
         <a href="{% url 'login' %}">Login</a>
         <a href="{% url 'register' %}">Register</a>

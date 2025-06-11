@@ -47,6 +47,23 @@ html, body {
   text-decoration: none;
 }
 
+/*Notification*/
+.notification-badge {
+  background-color: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-left: 4px;
+  display: inline-block;
+  min-width: 18px;
+  text-align: center;
+  vertical-align: top; /* Or middle depending on layout */
+  line-height: 1;
+}
+
 /* Grid container (home page) */
 .recipe-grid {
   display: grid;
@@ -754,6 +771,16 @@ html, body {
     border-left: 3px solid #ccc;
     background-color: #f9f9f9;
     border-radius: 5px;
+}
+
+.comment-box:target {
+    animation: fadeHighlight 3s ease-in-out forwards;
+    outline: 2px solid #ffce00;
+}
+
+@keyframes fadeHighlight {
+    0%   { background-color: #e2e1d5; }
+    100% { background-color: transparent; }
 }
 
 /* -------------------------Style for recipe-User----- -------------------------- */
