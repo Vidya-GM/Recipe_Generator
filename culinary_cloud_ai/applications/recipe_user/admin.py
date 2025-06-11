@@ -1,5 +1,5 @@
 from django.contrib import admin
-from applications.recipe_user.models import RecipeUser
+from applications.recipe_user.models import RecipeUser, Notification
 from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
@@ -23,3 +23,4 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(RecipeUser, CustomUserAdmin)
+admin.site.register(Notification)
