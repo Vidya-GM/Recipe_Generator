@@ -28,7 +28,7 @@ DEFAULT_APPS = [
 ]
 
 CUSTOM_APPS = [
-    "applications.recipe_user",
+    "applications.recipe_user.apps.RecipeUserConfig",
     "applications.recipes",
     
 ]
@@ -63,6 +63,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "applications.recipe_user.context_processors.notification_count",
             ],
         },
     },
