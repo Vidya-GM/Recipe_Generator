@@ -76,7 +76,7 @@
         
         <!-- --- Display all Comments -- -->
         {% for comment in comments %}
-            <div class="comment-box">
+            <div class="comment-box" id="comment-{{ comment.id }}">
                 <div>{{ comment.content }}</div>
                     <div class="comment-meta">
                     &nbsp;&nbsp;&nbsp;-- <small><em>By {{ comment.author.username }}</em></small>

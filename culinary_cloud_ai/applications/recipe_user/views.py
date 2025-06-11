@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from applications.recipe_user.forms import RecipeUserRegistrationForm, RecipeUserUpdateForm
 from django.contrib import messages
+from applications.recipe_user.models import Notification
+from applications.recipes.models import Recipe, Like, Comment
 
 
 # Create your views here.
@@ -30,9 +32,11 @@ def recipeuserLogin(request):
 
     return render(request, "recipe_user/recipeuser_login.html", {'form': form})
 
+
 def recipeuserLogout(request):
     logout(request)     
     return redirect('login')
+
 
 def recipeuserRegister(request):
     if request.method == "POST":
@@ -48,10 +52,12 @@ def recipeuserRegister(request):
         form = RecipeUserRegistrationForm()
         return render(request, "recipe_user/recipeuser_register.html", {"form": form})
 
+
 @login_required    
 def recipeuserDetails(request):
     recipeuser = request.user
     return render(request, "recipe_user/recipeuser_details.html", {"recipeuser": recipeuser})
+
 
 @login_required
 def recipeuserUpdate(request):
@@ -68,7 +74,8 @@ def recipeuserUpdate(request):
     else:
         form = RecipeUserUpdateForm(instance=recipeuser)
         return render(request, "recipe_user/recipeuser_update.html", {"form": form})
-    
+
+
 @login_required
 def myRecipes(request):
     recipeuser = request.user
@@ -76,3 +83,45 @@ def myRecipes(request):
     print(my_recipes)
     return render(request, "recipe_user/my_recipe_list.html", {"my_recipes": my_recipes,
                                                             "recipeuser": recipeuser})
+
+
+@login_required
+def notificationList(request):
+    notifications = request.user.notifications.all()
+    notif_recipient = request.user
+    return render(request, "recipe_user/notification_list.html", {"notifications": notifications,
+                                                                    "notif_recipient": notif_recipient})
+
+
+@login_required
+def notificationVisit(request, pk):
+    notification = get_object_or_404(Notification, pk=pk, notif_recipient=request.user)
+    notification.is_read = True
+    notification.save()
+
+    target = notification.target
+
+    # If target is a Comment or Like, redirect to its recipe
+    if hasattr(target, 'recipe'):
+        # If it's a Comment, include anchor to scroll to it
+        if target.__class__.__name__ == "Comment":
+            return redirect(f"{target.recipe.get_absolute_url()}#comment-{target.id}")
+        elif target.__class__.__name__ == "Like":
+            return redirect(f"{target.recipe.get_absolute_url()}#likes") 
+
+        return redirect(target.recipe.get_absolute_url())
+
+    # If it's a Recipe
+    if hasattr(target, 'get_absolute_url'):
+        return redirect(target.get_absolute_url())
+
+    # Fallback
+    return redirect("notifications-list")
+
+
+@login_required
+def delete_selected_notification(request):
+    if request.method == "POST":
+        ids = request.POST.getlist("selected_notifications")
+        Notification.objects.filter(id__in=ids, notif_recipient=request.user).delete()
+    return redirect("notification-list")

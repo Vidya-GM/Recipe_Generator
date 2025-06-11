@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+
+<h2> {{ notif_recipient }}'s Notifications </h2>
+    {% if notifications %}
+    <form method="POST" action="{% url 'delete-selected-notifications' %}">
+        {% csrf_token %}
+        <table>
+        <thead>
+            <tr>
+                <th>
+                    <button type="submit" title="Delete selected" style="background: rgb(197, 222, 240); border: none; cursor: pointer; padding-left: 5px;">
+                    <img src="{% static 'images/trash_can.svg' %}" alt="Delete" width="19">
+                    </button>
+                </th>
+                <th>S.No</th>  <!-- Serial Number -->
+                <th>Message</th>
+                <th>Received</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notification in notifications %}
+                <tr class="{% if notification.is_read %}read{% else %}unread{% endif %}">
+                    <td>
+                        <input type="checkbox" name="selected_notifications" value="{{ notification.id }}">
+                    </td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'notification-visit' notification.id %}">
+                            {{ notification.notif_message|truncatechars:60 }}
+                        </a>
+                    </td>
+                    <td>{{ notification.created_at|date:"M d, Y H:i" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    </form>        
+
+    {% else %}
+        <p> You do not have any notification </p>
+    {% endif %}
+
+{% endblock %}
