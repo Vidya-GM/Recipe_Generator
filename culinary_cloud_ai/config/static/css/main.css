@@ -55,9 +55,33 @@ html, body {
   margin: 1.5rem;
 }
 
-/* Recipe card */
+
+
+
+
+
+/* ====================================================================
+   1) YOUR ORIGINAL GRID & CARD STYLING
+   ==================================================================== */
+
+/* Recipe grid */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem;
+}
+
+/* Recipe card (front face) */
 .recipe-card {
-  background:#ffffff; 
+  position: relative;           /* keep for flip */
+  perspective: 1000px;          /* keep for flip */
+  overflow: hidden;             /* keep for flip */
+
+
+  transform-style: preserve-3d;
+
+  background: #ffffff;
   border-radius: 12px;
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.1),
@@ -65,15 +89,22 @@ html, body {
   padding: 1rem;
   text-decoration: none;
   color: inherit;
+
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s ease-in-out;
+  /* REPLACE your old transition here: */
+  transition:
+    transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
+    box-shadow 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
 }
+
 .recipe-card:hover {
   box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.1),
     0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: scale(1.05);
 }
+
 .recipe-card img {
   width: 100%;
   height: 150px;
@@ -81,16 +112,19 @@ html, body {
   border-radius: 8px;
   margin-bottom: 0.75rem;
 }
+
 .recipe-card h2 {
   margin: 0.5rem 0 0.25rem;
   font-size: 1.125rem;
 }
+
 .recipe-card p {
   flex-grow: 1;
   color: #555;
   font-size: 0.875rem;
   margin: 0.5rem 0;
 }
+
 .recipe-card .stats {
   margin-top: 0.5rem;
   font-size: 0.875rem;
@@ -98,6 +132,98 @@ html, body {
   display: flex;
   gap: 1rem;
 }
+
+/* ====================================================================
+   2) NEW: FLIP-OVERLAY STYLING
+   ==================================================================== */
+
+/* Hide the “front” on hover */
+.recipe-card .card-front {
+  transition:
+    opacity 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
+    transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.recipe-card:hover .card-front {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* The back panel */
+/* .recipe-card__overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  padding: 1rem;
+  background: rgba(255,255,255,0.9);
+
+  box-sizing: border-box;
+
+  transform: rotateX(-90deg);
+  transform-origin: bottom;
+  transition: transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.recipe-card:hover .recipe-card__overlay {
+  transform: rotateX(0deg);
+} */
+
+
+/* instead of rotateX, do this: */
+.recipe-card__overlay {
+  position: absolute;
+  top: 100%; left: 0;
+  width: 100%;
+  height: 90%;
+  padding: 1rem;
+  background: #fff;        /* solid white so text is sharp */
+  box-sizing: border-box;
+  text-align: center;
+
+  display: flex;           /* NEW */
+  flex-direction: column;  /* NEW */
+  justify-content: flex-start;
+  align-items: center;
+
+  transform: translateY(0); /* start off‐screen below */
+  opacity: 0;
+  /* transition: transform 0.6s ease, opacity 0.6s ease; */
+  transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+
+.recipe-card:hover .recipe-card__overlay {
+  transform: translateY(-100%);  /* slide up into view */
+  opacity: 1;
+}
+
+
+
+
+.recipe-card__overlay .card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.recipe-card__overlay .card__description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+
+
+
+
+
+
+
 
 /* Pagination */
 .pagination {
@@ -607,7 +733,7 @@ html, body {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.692);
   z-index: 1000;
   display: flex;
   align-items: center;
