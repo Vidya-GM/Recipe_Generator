@@ -61,7 +61,7 @@ html, body {
 
 
 /* ====================================================================
-   1) YOUR ORIGINAL GRID & CARD STYLING
+   1) ORIGINAL GRID & CARD STYLING
    ==================================================================== */
 
 /* Recipe grid */
@@ -92,7 +92,7 @@ html, body {
 
   display: flex;
   flex-direction: column;
-  /* REPLACE your old transition here: */
+
   transition:
     transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
     box-shadow 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
@@ -105,7 +105,7 @@ html, body {
   transform: scale(1.05);
 }
 
-.recipe-card img {
+.recipe-card .card-front img {
   width: 100%;
   height: 150px;
   object-fit: cover;
@@ -148,44 +148,20 @@ html, body {
   transform: scale(0.8);
 }
 
-/* The back panel */
-/* .recipe-card__overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  padding: 1rem;
-  background: rgba(255,255,255,0.9);
-
-  box-sizing: border-box;
-
-  transform: rotateX(-90deg);
-  transform-origin: bottom;
-  transition: transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.recipe-card:hover .recipe-card__overlay {
-  transform: rotateX(0deg);
-} */
-
-
-/* instead of rotateX, do this: */
 .recipe-card__overlay {
   position: absolute;
   top: 100%; left: 0;
   width: 100%;
   height: 90%;
   padding: 1rem;
+
   background: #fff;        /* solid white so text is sharp */
+
   box-sizing: border-box;
   text-align: center;
 
-  display: flex;           /* NEW */
-  flex-direction: column;  /* NEW */
+  display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 
@@ -219,6 +195,18 @@ html, body {
 
 
 
+.recipe-card__avatar {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  z-index: 10;
+}
 
 
 
