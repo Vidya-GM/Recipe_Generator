@@ -254,111 +254,353 @@ html, body {
   color: #333;
 }
 
-/* Detail page container – now full-width */
+/* ───────── Recipe Detail Layout ───────── */
 .recipe-detail-container {
+  /* 1) Let it span the full width up to a max */
+  width: 100%;
+  max-width: 1500px;        /* whatever maximum you like */
+  
+  /* 2) Center it and give it equal side‐padding */
+  margin: 2rem 0rem 0rem 9rem;
+  padding: 0 2rem;          /* 2rem on left & right gutters */
+  
+  /* 3) Your existing grid setup */
+  display: grid;
+  grid-template-columns: 40% 60%;  /* or 1fr 1fr */
+  gap: 3rem;                       /* your desired gutter */
+}
+@media (max-width: 700px) {
+  .recipe-detail-container {
+    grid-template-columns: 1fr;
+    width: calc(100% - 2rem);
+  }
+}
+
+/* Left: Image */
+.recipe-detail-image {
   display: flex;
+  justify-content: center;
+}
+.recipe-detail-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 30px;
+  object-fit: cover;
+}
+
+/* ───────── Right: Info panel ───────── */
+.recipe-detail-info {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-items: flex-start;
-  /* Remove the old max-width:900px; make it span full page with side padding */
-  width: calc(100% - 4rem);
-  margin: 2rem auto;
-  background: #ffffff;
+
+  background: #fff;
   border: 1px solid #ddd;
-  border-radius: 6px;
-  overflow: hidden;
+  border-radius: 30px;
   box-shadow:
     0 1px 3px rgba(0,0,0,0.1),
     0 1px 2px rgba(0,0,0,0.06);
-}
-
-/* Left: fixed 40% column for the image */
-.recipe-detail-image {
-  flex: 0 0 40%;
-  max-width: 40%;
-  object-fit: cover;
-  display: block;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-}
-
-/* Right: info panel */
-.recipe-detail-info {
-  flex: 1;
   padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Title pill */
-.detail-title-pill {
+/* ───────── Base pill styling ───────── */
+.pill {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
+  padding: 0.4rem 0.8rem;
+  margin: 0.2rem 0.4rem;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.pill:hover,
+.pill:focus {
+  background-color: #e5e5e5;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ───────── Title & Description Pills ───────── */
+.detail-title-pill,
+.detail-desc-pill {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
   border: 1px solid #ccc;
-  margin-bottom: 1rem;
+}
+.detail-title-pill {
   font-size: 1.5rem;
   font-weight: 600;
+  background: #fafafa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-/* Description pill */
 .detail-desc-pill {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid #ccc;
-  margin-bottom: 1.5rem;
   color: #555;
+  background: #fafafa;
 }
 
-/* Details block */
+/* ───────── Ingredients + Meta row ───────── */
 .detail-details {
   background: #fafafa;
   border: 1px solid #ddd;
   border-radius: 6px;
+  display: flex;
+  gap: 1rem;
   padding: 1rem;
+}
+.ingredients-section {
+  flex: 2;
+}
+.ingredients-section h3 {
+  margin-top: 0;
+}
+.ingredients-section ul {
+  margin: 0.5rem 0 0 1rem;
+}
+.meta-pills {
   flex: 1;
-  overflow-y: auto;
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
 }
-.detail-details h3 {
-  margin: 1rem 0 0.5rem;
-}
-.detail-details ul,
-.detail-details ol {
-  margin: 0.5rem 0 1rem 1.5rem;
-}
-
-/* Back to Main Page pill */
-.back-link {
-  display: inline-block;
-  margin: 0 auto;
-  padding: 0.5rem 1rem;
+.meta-pills .pill {
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 9999px;
+  text-align: center;
+}
+
+
+/* Make the owner pill a little inline-flex box */
+.owner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Tweak the image inside it */
+.owner-pill .owner-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+
+/* ───────── Instructions block ───────── */
+.detail-instructions {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+.detail-instructions h3 {
+  margin-top: 0;
+}
+.detail-instructions ol {
+  margin: 0.5rem 0 0 1.5rem;
+}
+
+
+/* Footer: Comments & Like */
+.recipe-detail-footer {
+  display: flex;
+  justify-content: space-between;   /* space them out horizontally */
+  align-items: flex-start;          /* don’t stretch them vertically */
+  gap: 1rem;
+  
+  /* constrain to the same max-width as your main container */
+  width: calc(100% - 4rem);
+  max-width: 1200px;                /* tweak to your design’s max width */
+  margin: 2rem auto;                /* center it and give vertical breathing room */
+}
+
+/* Comments panel stays fluid */
+.comments-section {
+  flex: 1;                          /* fill remaining space */
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+/* Like panel no longer stretches */
+.like-section {
+  flex: 0 0 auto;                   /* auto width, no grow or shrink */
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  text-align: center;
+  
+  /* Optional: give a fixed width so it stays neat */
+  width: 80px;                      /* or whatever fits your icon/text */
+}
+
+/* ─── Like Section Compact Styling ─── */
+
+.like-section {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  max-width: 160px;         /* shrink the block */
+  text-align: center;
+}
+
+.like-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-like {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.btn-like:active {
+  transform: scale(1.2);
+}
+
+.like-count {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+/* Link for non-authenticated users */
+.like-login {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #3182ce;
   text-decoration: none;
-  color: #333;
+}
+.like-login:hover {
+  text-decoration: underline;
+}
+
+
+/* Back link at bottom */
+.detail-back {
+  text-align: center;
+  margin: 2rem 0;
+}
+.back-btn {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: #3182ce;
+  color: white;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.back-btn:hover {
+  background: #2b6cb0;
+}
+
+
+/* ───────── Interaction Block (Comments + Like) ───────── */
+.interaction-block {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+
+  /* MATCH the two-column container exactly: */
+  width: calc(100% - 4rem);
+  max-width: 1510px;        /* use whatever max-width your detail container uses */
+  margin: 3rem auto;        /* center it under the columns */
+}
+/* header: “Write a comment” + like button */
+.interaction-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.interaction-header label {
+  font-weight: 600;
+}
+/* Wrap the heart, “Likes:” label and count */
+.like-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* The heart button */
+.btn-like {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.1s ease;
+}
+.btn-like:active {
+  transform: scale(1.2);
+}
+
+/* Static “Likes:” text */
+.like-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* The actual count */
+.like-count {
+  font-size: 1rem;
   font-weight: 600;
 }
 
-/* Responsive: stack on narrow screens */
-@media (max-width: 700px) {
-  .recipe-detail-container {
-    flex-direction: column;
-    width: calc(100% - 2rem);
-    margin: 1rem auto;
-  }
-  .recipe-detail-image,
-  .recipe-detail-info {
-    flex: 0 0 auto;
-    max-width: 100%;
-  }
-  .recipe-detail-image {
-    border-radius: 6px 6px 0 0;
-    height: auto;
-  }
-  .recipe-detail-info {
-    border-radius: 0 0 6px 6px;
-  }
+/* the fixed‐height textarea */
+.comment-block textarea {
+  resize: none;
+  height: 120px;
+  max-height: 120px;
+  min-height: 120px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+.comment-block .btn {
+  margin-top: 0.5rem;
+}
+
+/* list of existing comments */
+.comments-list {
+  margin-top: 1rem;
+}
+.comment-box {
+  background: #fff;
+  border-left: 3px solid #ccc;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+.comment-meta {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
 }
 
 
