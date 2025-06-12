@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from applications.recipe_user.forms import RecipeUserRegistrationForm, RecipeUserUpdateForm
 from django.contrib import messages
 from applications.recipe_user.models import Notification
+from django.db.models import Q, Count, Exists, OuterRef
 from applications.recipes.models import Recipe, Like, Comment
 
 
@@ -125,3 +126,41 @@ def delete_selected_notification(request):
         ids = request.POST.getlist("selected_notifications")
         Notification.objects.filter(id__in=ids, notif_recipient=request.user).delete()
     return redirect("notification-list")
+
+
+@login_required
+def myRecipes(request):
+    recipeuser = request.user
+    queryset = Recipe.objects.filter(recipe_owner=recipeuser)
+
+    q = request.GET.get("q")
+    if q:
+        queryset = queryset.filter(
+            Q(title__icontains=q) |
+            Q(description__icontains=q) |
+            Q(ingredients__icontains=q)
+        )
+
+    queryset = queryset.annotate(
+        likes_count=Count('likes', distinct=True),
+        annotated_comments_count=Count('comments', distinct=True)
+    )
+
+    if recipeuser.is_authenticated:
+        user_likes = Like.objects.filter(author=recipeuser, recipe=OuterRef('pk'))
+        queryset = queryset.annotate(user_liked=Exists(user_likes))
+    else:
+        queryset = queryset.annotate(user_liked=Q(pk__isnull=True))
+
+    sort_option = request.GET.get("sort", "-created_at")
+    allowed_sorts = ["-created_at", "created_at", "-likes_count", "-annotated_comments_count"]
+
+    if sort_option in allowed_sorts:
+        queryset = queryset.order_by(sort_option)
+    else:
+        queryset = queryset.order_by("-created_at")
+
+    return render(request, "recipe_user/my_recipe_list.html", {
+        "my_recipes": queryset,
+        "recipeuser": recipeuser,
+    })
