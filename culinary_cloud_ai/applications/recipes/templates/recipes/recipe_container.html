@@ -8,10 +8,10 @@
     {% else %}
       <img src="{% static 'images/placeholder.png' %}" alt="No image">
     {% endif %}
-    <h2>{{ recipe.title }}</h2>
+    <h2>{{ recipe.title|truncatechars:47 }}</h2>
     <div class="stats">
-      <span>Likes: {{ recipe.likes_count }}</span>
-      <span>Comments: {{ recipe.comments_count }}</span>
+      <span>❤️ {{ recipe.likes_count }}</span>
+      <span>💬 {{ recipe.comments_count }}</span>
     </div>
   </div>
 
