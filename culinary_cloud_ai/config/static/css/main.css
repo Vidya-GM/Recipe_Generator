@@ -47,6 +47,23 @@ html, body {
   text-decoration: none;
 }
 
+/*Notification*/
+.notification-badge {
+  background-color: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-left: 4px;
+  display: inline-block;
+  min-width: 18px;
+  text-align: center;
+  vertical-align: top; /* Or middle depending on layout */
+  line-height: 1;
+}
+
 /* Grid container (home page) */
 .recipe-grid {
   display: grid;
@@ -93,6 +110,8 @@ html, body {
   display: flex;
   flex-direction: column;
 
+  min-height: 240px;
+
   transition:
     transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
     box-shadow 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
@@ -126,7 +145,8 @@ html, body {
 }
 
 .recipe-card .stats {
-  margin-top: 0.5rem;
+  margin-top: auto;
+  /* margin-top: 0.5rem; */
   font-size: 0.875rem;
   color: #777;
   display: flex;
@@ -139,6 +159,10 @@ html, body {
 
 /* Hide the “front” on hover */
 .recipe-card .card-front {
+  flex: 1;                    /* fill all the space in the card */
+  display: flex;
+  flex-direction: column;
+
   transition:
     opacity 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
     transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
@@ -617,7 +641,6 @@ html, body {
     #ffffff;  /* fallback color */
   border: 1px solid #ddd;
   border-radius: 8px;
-  tergb(70, 26, 26)n: center;
   box-shadow:
     0 1px 3px rgba(0,0,0,0.1),
     0 1px 2px rgba(0,0,0,0.06);
@@ -868,6 +891,16 @@ html, body {
     border-left: 3px solid #ccc;
     background-color: #f9f9f9;
     border-radius: 5px;
+}
+
+.comment-box:target {
+    animation: fadeHighlight 3s ease-in-out forwards;
+    outline: 2px solid #ffce00;
+}
+
+@keyframes fadeHighlight {
+    0%   { background-color: #e2e1d5; }
+    100% { background-color: transparent; }
 }
 
 /* -------------------------Style for recipe-User----- -------------------------- */

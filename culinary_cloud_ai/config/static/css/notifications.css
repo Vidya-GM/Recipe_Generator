@@ -1,0 +1,33 @@
+.unread {
+        font-weight: bold;
+        background-color: #f7faff;
+    }
+
+    .read {
+        color: gray;
+    }
+
+    table {
+    width: 70%; /* or use max-width: 800px; */
+    margin: 20px auto; /* centers the table horizontally */
+    border-collapse: collapse;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    }
+
+    th, td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #9dcbf0;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 30px;
+    }
+

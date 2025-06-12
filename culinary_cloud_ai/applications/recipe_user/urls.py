@@ -9,6 +9,9 @@ urlpatterns = [
     path("profile/", views.recipeuserDetails, name="profile"),
     path("update-profile/", views.recipeuserUpdate, name="update-profile"),
     path("my-recipes/", views.myRecipes, name="my-recipes"),
+    path("notifications/", views.notificationList, name="notification-list"),
+    path("notifications/visit/<int:pk>/", views.notificationVisit, name="notification-visit"),
+    path('notifications/delete-selected/', views.delete_selected_notification, name='delete-selected-notifications'),
 
 ]
 
