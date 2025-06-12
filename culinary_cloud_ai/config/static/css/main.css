@@ -1079,12 +1079,13 @@ html, body {
   justify-content: center;
   margin: 1rem auto;
   width: 100%;
-  max-width: 320px;
+  max-width: 450px;
+  margin-left: 44rem;
 }
 
 .search-bar input[type="text"] {
   flex: 1;
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 0.75rem;
   border: 1px solid #ccc;
   border-radius: 8px 0 0 8px;
   font-size: 0.9rem;
@@ -1118,13 +1119,14 @@ html, body {
 }
 
 .sort-form {
-  width: 214px; /* half of search bar */
+  width: 215px; /* half of search bar */
   display: flex;
   align-items: center;
   gap: 0;
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;
+  margin-right: 3rem;
 }
 
 .sort-form select {
@@ -1154,6 +1156,8 @@ html, body {
 .sort-form button:hover {
   background-color: #555;
 }
+
+
 
 
 
