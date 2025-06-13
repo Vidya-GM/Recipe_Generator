@@ -102,6 +102,10 @@ def notificationVisit(request, pk):
 
     target = notification.target
 
+    if not target:
+        messages.warning(request, "This notification is no longer valid.")
+        return redirect("notification-list")
+
     # If target is a Comment or Like, redirect to its recipe
     if hasattr(target, 'recipe'):
         # If it's a Comment, include anchor to scroll to it
