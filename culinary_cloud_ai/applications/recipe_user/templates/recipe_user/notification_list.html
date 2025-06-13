@@ -5,6 +5,20 @@
 <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 
 <h2> {{ notif_recipient }}'s Notifications </h2>
+
+    <!--  Message display block -->
+    {% if messages %}
+        <ul class="messages" style="list-style: none; padding: 0;">
+            {% for message in messages %}
+                <li class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
+                style="text-align: center; color: red; font-weight: bold; margin: 20px 0;"
+                >
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     {% if notifications %}
     <form method="POST" action="{% url 'delete-selected-notifications' %}">
         {% csrf_token %}
