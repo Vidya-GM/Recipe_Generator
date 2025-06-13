@@ -3,23 +3,29 @@
 
 {% block content %}
 
-  <div class="search-sort-container">
-  <div class="search-bar">
+<div class="search-sort-container">
+
+  <form class="search-bar" method="GET" action="/recipes/">
     <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search...">
     <button type="submit">Search</button>
-  </div>
+  </form>
 
-    <form class="sort-form" method="GET" action="/recipes/">
-      <input type="hidden" name="q" value="{{ request.GET.q }}">
-      <select name="sort">
-        <option value="-created_at" {% if request.GET.sort == "-created_at" or not request.GET.sort %}selected{% endif %}>Newest</option>
-        <option value="created_at" {% if request.GET.sort == "created_at" %}selected{% endif %}>Oldest</option>
-        <option value="-likes_count" {% if request.GET.sort == "-likes_count" %}selected{% endif %}>Most Liked</option>
-        <option value="-annotated_comments_count" {% if request.GET.sort == "-annotated_comments_count" %}selected{% endif %}>Most Commented</option>
-      </select>
-      <button type="submit">Apply</button>
-    </form>
-  </div>
+  <form class="sort-form" method="GET" action="/recipes/">
+    <input type="hidden" name="q" value="{{ request.GET.q }}">
+    <select name="sort">
+      <option value="" disabled {% if not request.GET.sort %}selected{% endif %}>Sort by</option>
+      <option value="-created_at" {% if request.GET.sort == "-created_at" %}selected{% endif %}>Newest</option>
+      <option value="created_at" {% if request.GET.sort == "created_at" %}selected{% endif %}>Oldest</option>
+      <option value="-likes_count" {% if request.GET.sort == "-likes_count" %}selected{% endif %}>Most Liked</option>
+      <option value="-annotated_comments_count" {% if request.GET.sort == "-annotated_comments_count" %}selected{% endif %}>Most Commented</option>
+    </select>
+    <button type="submit">Apply</button>
+  </form>
+
+</div>
+
+
+
 
   <div class="recipe-grid">
     {% for recipe in recipes %}
