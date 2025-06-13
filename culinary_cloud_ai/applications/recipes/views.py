@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count, Exists, OuterRef, Q
 from collections import defaultdict
+from django.utils.decorators import method_decorator
 
 
 def home(request):
@@ -137,6 +138,7 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return comment.author == user or comment.recipe.recipe_owner == user
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class GenerateCombinedView(View):
     """Run the full pipeline (text + image) and then redirect to the saved recipe."""
 
