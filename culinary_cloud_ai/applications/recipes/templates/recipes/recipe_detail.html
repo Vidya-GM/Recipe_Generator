@@ -91,11 +91,10 @@
         <label for="comment-content">Write a comment</label>
 
         <div class="like-wrapper">
+          <span class="like-label">Likes:</span>
           <button type="submit" class="btn-like">
             {% if user_has_liked %}❤️{% else %}♡{% endif %}
           </button>
-          <span class="like-label">Likes:</span>
-          {# Use Django’s related-manager count in the template #}
           <span class="like-count">{{ recipe.likes.count }}</span>
         </div>
       </form>
@@ -113,25 +112,69 @@
       <p><a href="{% url 'login' %}?next={{ request.path }}">Login to comment or like</a></p>
     {% endif %}
 
+    <!-- Display all Comments with delete UI -->
     <div class="comments-list">
       {% for comment in comments %}
-        <div class="comment-box">
+        <div class="comment-box" id="comment-{{ comment.id }}">
           <p>{{ comment.content }}</p>
           <p class="comment-meta">
-            — <em>{{ comment.author.username }}</em>,
-            <small>{{ comment.created_at|date:"M d, Y H:i" }}</small>
+            — <em>By {{ comment.author.username }}</em>,
+            <small>({{ comment.created_at|date:"M d, Y H:i" }})</small>
           </p>
+
+          {% if user.is_authenticated %}
+            {% if comment.author == user %}
+              {% if comment_to_delete and comment_to_delete.pk == comment.pk %}
+                <div class="delete-confirmation" style="margin-top: 10px;">
+                  <p style="color: red; font-style: italic;">
+                    Are you sure you want to delete this comment?
+                  </p>
+                  <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">Confirm Delete</button>
+                    <a href="{{ recipe.get_absolute_url }}">Cancel</a>
+                  </form>
+                </div>
+              {% else %}
+                <form method="get"
+                      action="{% url 'recipes:comment-delete' comment.pk %}"
+                      style="display:inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              {% endif %}
+            {% elif recipe.recipe_owner == user %}
+              {% if comment_to_delete and comment_to_delete.pk == comment.pk %}
+                <div class="delete-confirmation" style="margin-top: 10px;">
+                  <p style="color: red; font-style: italic;">
+                    Are you sure you want to delete this comment?
+                  </p>
+                  <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">Confirm Delete</button>
+                    <a href="{{ recipe.get_absolute_url }}">Cancel</a>
+                  </form>
+                </div>
+              {% else %}
+                <form method="get"
+                      action="{% url 'recipes:comment-delete' comment.pk %}"
+                      style="display:inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+
         </div>
       {% empty %}
         <p>No comments yet.</p>
       {% endfor %}
-    </div>
+    </div><!-- /.comments-list -->
 
   </div><!-- /.interaction-block -->
 
 
   <!-- BACK LINK -->
   <div class="detail-back">
-    <a href="{% url 'recipes:home' %}" class="btn back-btn">Back to Recipes</a>
+    <a href="{% url 'recipes:recipe-list' %}" class="btn back-btn">Back to Recipes</a>
   </div>
 {% endblock %}
