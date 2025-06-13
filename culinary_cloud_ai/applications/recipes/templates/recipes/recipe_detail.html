@@ -2,132 +2,179 @@
 {% load static %}
 
 {% block content %}
-<div class="recipe-detail-container">
-    {% if recipe.recipe_image %}
-        <img
-            src="{{ recipe.recipe_image.url }}"
-            alt="{{ recipe.title }}"
-            class="recipe-detail-image"
-        >
-    {% endif %}
+  <!-- Main two-column container -->
+  <div class="recipe-detail-container">
 
+    <!-- LEFT: IMAGE -->
+    <div class="recipe-detail-image">
+      {% if recipe.recipe_image %}
+        <img src="{{ recipe.recipe_image.url }}" alt="{{ recipe.title }}">
+      {% else %}
+        <img src="{% static 'images/placeholder.png' %}" alt="No image">
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: INFO PANEL -->
     <div class="recipe-detail-info">
-        <div class="detail-title-pill">{{ recipe.title }}</div>
 
-        {% if recipe.short_description %}
-            <div class="detail-desc-pill">{{ recipe.short_description }}</div>
-        {% endif %}
+      <!-- 1) Title pill -->
+      <div class="detail-title-pill">{{ recipe.title }}</div>
 
-        <div class="detail-details">
-            {% if recipe.description %}
-                <p><strong>Description:</strong> {{ recipe.description }}</p>
-            {% endif %}
+      <!-- 2) Description pill -->
+      {% if recipe.description %}
+        <div class="detail-desc-pill">{{ recipe.description }}</div>
+      {% endif %}
 
-            {% if recipe.ingredients %}
-                <h3>Ingredients</h3>
-                <ul>
-                {% for line in recipe.ingredients.splitlines %}
-                    <li>{{ line }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
+      <!-- 3) Ingredients + Meta row -->
+      <div class="detail-details">
 
-            {% if recipe.instructions %}
-                <h3>Instructions</h3>
-                <ol>
-                {% for step in recipe.instructions.splitlines %}
-                    <li>{{ step }}</li>
-                {% endfor %}
-                </ol>
-            {% endif %}
-
-            {% if recipe.difficulty %}
-                <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
-            {% endif %}
-
-            {% if recipe.cuisine %}
-                <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
-            {% endif %}
-
-            {% if recipe.cooking_time %}
-                <p><strong>Time:</strong> {{ recipe.cooking_time }}</p>
-            {% endif %}
-        <p><strong>By:</strong> {{ recipe.recipe_owner.username }}</p>
-        
-        <hr>
-        
-        <!-- --- Likes --- -->
-        <p><strong>Likes:</strong>    {{ recipe.likes_count }}</p>
-        {% if user.is_authenticated %}
-            <form action="{% url 'recipes:toggle_like' recipe.id %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            {% if user_has_liked %}
-                <button type="submit" class="btn btn-danger">❤️ Unlike</button>
-            {% else %}
-                <button type="submit" class="btn btn-outline-danger">♡ Like</button>
-            {% endif %}
-            </form>
-        {% else %}
-            <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to like this recipe.</p>
-        {% endif %}
-        
-        <!-- --- comments_count for the recipe-card -- -->
-        <p><strong>Comments:</strong> {{ recipe.comments_count }}</p>
-        
-        <!-- --- Display all Comments -- -->
-        {% for comment in comments %}
-            <div class="comment-box" id="comment-{{ comment.id }}">
-                <div>{{ comment.content }}</div>
-                    <div class="comment-meta">
-                    &nbsp;&nbsp;&nbsp;-- <small><em>By {{ comment.author.username }}</em></small>
-                    <small>({{ comment.created_at|date:"M d, Y H:i" }})</small>
-
-                    <!-- Delete comment -->
-                    {% if user.is_authenticated %}
-                        {% if comment.author == user or recipe.recipe_owner == user %}
-                            {% if comment_to_delete and comment_to_delete.pk == comment.pk %}
-                            <!-- Show confirmation only for the comment targeted for delete -->
-                                <div class="delete-confirmation" style="margin-top: 10px;">
-                                    <p style="color: red; font-style: italic;">Are you sure you want to delete this comment?</p>
-                                    <form method="post">
-                                        {% csrf_token %}
-                                        <button type="submit">Confirm Delete</button>
-                                        <a href="{{ comment_to_delete.recipe.get_absolute_url }}">Cancel</a>
-                                    </form>
-                                </div>
-                            {% else %}
-                                <!-- Else Show only delete button that leads to confirmation view -->
-                                <form method="get" action="{% url 'recipes:comment-delete' comment.pk %}" style="display:inline;">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-                    
-                </div>
-            </div>
-        {% empty %}
-            <p>No comments yet.</p>
-        {% endfor %}
-
-        <hr>
-
-        <!-- -- Allow user to comment if authenticated(if logged-in) -- -->
-        {% if user.is_authenticated %}
-            <h3>Add a Comment</h3>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Submit </button>
-            </form>
-        {% else %}
-            <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to add a comment.</p>
-        {% endif %}
-
+        <!-- Ingredients list -->
+        <div class="ingredients-section">
+          <h3>Ingredients</h3>
+          <ul>
+            {% for line in recipe.ingredients.splitlines %}
+              <li>{{ line }}</li>
+            {% endfor %}
+          </ul>
         </div>
 
-        <a href="{% url 'recipes:home' %}" class="back-link">Back to Main Page</a>
-    </div>
-</div>
+        <!-- Meta pills + owner -->
+        <div class="meta-pills">
+          {% if recipe.difficulty %}
+            <span class="pill">Difficulty – {{ recipe.difficulty }}</span>
+          {% endif %}
+          {% if recipe.cuisine %}
+            <span class="pill">Cuisine – {{ recipe.cuisine }}</span>
+          {% endif %}
+          {% if recipe.cooking_time %}
+            <span class="pill">Cooking time – {{ recipe.cooking_time }}</span>
+          {% endif %}
 
+          <!-- Created-by pill with avatar -->
+          <div class="pill owner-pill">
+            <span>Created by {{ recipe.recipe_owner.username }}</span>
+            <img
+              src="{{ recipe.recipe_owner.profile_image.url }}"
+              alt="{{ recipe.recipe_owner.username }}'s avatar"
+              class="owner-avatar"
+            />
+          </div>
+        </div><!-- /.meta-pills -->
+
+      </div><!-- /.detail-details -->
+
+      <!-- 4) Instructions block -->
+      {% if recipe.instructions %}
+        <div class="detail-instructions">
+          <h3>Instructions</h3>
+          <ol>
+            {% for step in recipe.instructions.splitlines %}
+              <li>{{ step }}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      {% endif %}
+
+    </div><!-- /.recipe-detail-info -->
+
+  </div><!-- /.recipe-detail-container -->
+
+
+  <!-- INTERACTION BLOCK: comments + like together -->
+  <div class="interaction-block">
+
+    {% if user.is_authenticated %}
+      <form method="post"
+            action="{% url 'recipes:toggle_like' recipe.id %}"
+            class="interaction-header">
+        {% csrf_token %}
+        <label for="comment-content">Write a comment</label>
+
+        <div class="like-wrapper">
+          <span class="like-label">Likes:</span>
+          <button type="submit" class="btn-like">
+            {% if user_has_liked %}❤️{% else %}♡{% endif %}
+          </button>
+          <span class="like-count">{{ recipe.likes.count }}</span>
+        </div>
+      </form>
+
+      <form method="post" class="comment-block">
+        {% csrf_token %}
+        <textarea
+          id="comment-content"
+          name="content"
+          placeholder="Write a comment..."
+        ></textarea>
+        <button type="submit" class="btn">Add Comment</button>
+      </form>
+    {% else %}
+      <p><a href="{% url 'login' %}?next={{ request.path }}">Login to comment or like</a></p>
+    {% endif %}
+
+    <!-- Display all Comments with delete UI -->
+    <div class="comments-list">
+      {% for comment in comments %}
+        <div class="comment-box" id="comment-{{ comment.id }}">
+          <p>{{ comment.content }}</p>
+          <p class="comment-meta">
+            — <em>By {{ comment.author.username }}</em>,
+            <small>({{ comment.created_at|date:"M d, Y H:i" }})</small>
+          </p>
+
+          {% if user.is_authenticated %}
+            {% if comment.author == user %}
+              {% if comment_to_delete and comment_to_delete.pk == comment.pk %}
+                <div class="delete-confirmation" style="margin-top: 10px;">
+                  <p style="color: red; font-style: italic;">
+                    Are you sure you want to delete this comment?
+                  </p>
+                  <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">Confirm Delete</button>
+                    <a href="{{ recipe.get_absolute_url }}">Cancel</a>
+                  </form>
+                </div>
+              {% else %}
+                <form method="get"
+                      action="{% url 'recipes:comment-delete' comment.pk %}"
+                      style="display:inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              {% endif %}
+            {% elif recipe.recipe_owner == user %}
+              {% if comment_to_delete and comment_to_delete.pk == comment.pk %}
+                <div class="delete-confirmation" style="margin-top: 10px;">
+                  <p style="color: red; font-style: italic;">
+                    Are you sure you want to delete this comment?
+                  </p>
+                  <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">Confirm Delete</button>
+                    <a href="{{ recipe.get_absolute_url }}">Cancel</a>
+                  </form>
+                </div>
+              {% else %}
+                <form method="get"
+                      action="{% url 'recipes:comment-delete' comment.pk %}"
+                      style="display:inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+
+        </div>
+      {% empty %}
+        <p>No comments yet.</p>
+      {% endfor %}
+    </div><!-- /.comments-list -->
+
+  </div><!-- /.interaction-block -->
+
+
+  <!-- BACK LINK -->
+  <div class="detail-back">
+    <a href="{% url 'recipes:recipe-list' %}" class="btn back-btn">Back to Recipes</a>
+  </div>
 {% endblock %}

@@ -213,6 +213,7 @@ Return a JSON object with the following fields:
 ---
 
 Constraints:
+- Ingredients must include a quantity and unit (e.g. “100g onions”, “500g pork”, “2 tbsp soy sauce”).
 - Use only these difficulty values: Easy, Medium, Hard
 - Cuisine should be exactly one single word (e.g., Italian, Mexican, American), not hyphenated or multi-word (no “Italian-inspired” or “German-based”, don't leave it blank or "Unknown/ Unspecified")
 - Cooking_time must be a multiple of 15 minutes (e.g., 15, 30, 45, 60, 75, etc.). Do not use values like 3, 8, 12, or 16
