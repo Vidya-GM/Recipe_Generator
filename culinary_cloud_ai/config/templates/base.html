@@ -5,14 +5,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>{% block title %}Culinary Cloud AI{% endblock %}</title>
+  <title>{% block title %}Culinary Cloud{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+  <!-- Favicon -->
+  <link rel="icon"
+        type="image/x-icon"
+        href="{% static 'images/favicon.ico' %}">
+  <link rel="shortcut icon"
+        href="{% static 'images/favicon.ico' %}">
 </head>
 <body>
   <header>
     <nav class="site-nav">
       {# Brand / project name #}
-      <a href="{% url 'recipes:home' %}" class="site-title">Culinary Cloud AI</a>
+      <a href="{% url 'recipes:home' %}" class="site-title">Culinary Cloud</a>
 
       {# Main links #}
       <a href="{% url 'recipes:home' %}">Home</a>
@@ -27,9 +34,9 @@
         <a href="{% url 'profile' %}">Profile</a>
         <a href="{% url 'my-recipes' %}">My Recipes</a>
         <a href="{% url 'notification-list' %}">Notifications
-            {% if unread_notif_count > 0 %}
-                <span class="notification-badge">{{ unread_notif_count }}</span>
-            {% endif %}
+          {% if unread_notif_count > 0 %}
+            <span class="notification-badge">{{ unread_notif_count }}</span>
+          {% endif %}
         </a>
       {% else %}
         <a href="{% url 'login' %}">Login</a>
