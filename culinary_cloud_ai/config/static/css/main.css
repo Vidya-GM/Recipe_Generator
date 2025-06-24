@@ -17,6 +17,16 @@ html, body {
   background-size: cover, cover;
 }
 
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-wrapper > main {
+  flex: 1;
+}
+
 /* Main Navigation Bar with Brand + Background */
 .site-nav {
   display: flex;
@@ -1542,4 +1552,27 @@ html, body {
 .profile-box a:hover {
     background-color: #2980b9;
     transform: translateY(-2px);
+}
+
+
+/* ───────────────────────────────────────────────────────────────
+  Footer Styles
+   ─────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  text-align: center;
+  padding: 1rem 0;
+
+}
+.site-footer .footer-content {
+  display: inline-flex;
+  gap: 1rem;
+  align-items: center;
+}
+.site-footer a {
+  color: #161616;
+  text-decoration: none;
+}
+.site-footer a:hover {
+  text-decoration: underline;
 }

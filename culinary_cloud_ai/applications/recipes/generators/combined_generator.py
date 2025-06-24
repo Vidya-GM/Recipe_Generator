@@ -40,10 +40,13 @@ def generate_full_recipe(prompt: str) -> dict:
     ingredients = structured.get("ingredients", [])
     description = structured.get("description", "")
     image_prompt = (
-        f"A highly realistic photo of a freshly cooked {title} based on {description}, made exclusively using the ingredients mentioned {ingredients}."
-        "The dish is elegantly plated on a clean white ceramic plate, styled to highlight its freshness and appeal."
-        "Captured in soft, natural lighting, with no text or labels, and composed for maximum visual allure and gourmet presentation."
-        "WITHOUT any text on the image"
+        f"A high-resolution, ultra-realistic photograph of a beautifully plated dish of {title}, "
+        f"inspired by the following description: {description}. The meal is prepared using only the listed ingredients: {ingredients}. "
+        "The food is arranged with gourmet precision on a matte white ceramic plate, placed on a rustic wooden table or light stone surface. "
+        "The presentation is clean and artistic—emphasizing vibrant colors, fresh textures, and elegant plating techniques similar to Michelin-starred photography. "
+        "Lighting is soft, diffuse natural daylight from the side or behind, creating gentle highlights and shadows for a warm and inviting atmosphere. "
+        "Background is minimal and neutral to ensure full focus on the dish. No utensils, no human elements, no branding, no text—just the food as the star. "
+        "The photo should evoke a sense of culinary sophistication, hunger, and beauty."
     )
 
     # 5. Generate and download the image

@@ -16,38 +16,50 @@
         href="{% static 'images/favicon.ico' %}">
 </head>
 <body>
-  <header>
-    <nav class="site-nav">
-      {# Brand / project name #}
-      <a href="{% url 'recipes:home' %}" class="site-title">Culinary Cloud</a>
+  <div class="page-wrapper">
+    <header>
+      <nav class="site-nav">
+        {# Brand / project name #}
+        <a href="{% url 'recipes:home' %}" class="site-title">Culinary Cloud</a>
 
-      {# Main links #}
-      <a href="{% url 'recipes:home' %}">Home</a>
-      {% if user.is_authenticated %}
-        <a href="{% url 'recipes:generate_combined' %}">Try to generate</a>
-      {% else %}
-        <a href="{% url 'login' %}?next={% url 'recipes:generate_combined' %}">Try to generate</a>
-      {% endif %}
-      <a href="{% url 'recipes:recipe-list' %}">Recipes</a>
-      {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">Logout</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'my-recipes' %}">My Recipes</a>
-        <a href="{% url 'notification-list' %}">Notifications
-          {% if unread_notif_count > 0 %}
-            <span class="notification-badge">{{ unread_notif_count }}</span>
-          {% endif %}
-        </a>
-      {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}">Register</a>
-      {% endif %}
-    </nav>
-  </header>
+        {# Main links #}
+        <a href="{% url 'recipes:home' %}">Home</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'recipes:generate_combined' %}">Try to generate</a>
+        {% else %}
+          <a href="{% url 'login' %}?next={% url 'recipes:generate_combined' %}">
+            Try to generate
+          </a>
+        {% endif %}
+        <a href="{% url 'recipes:recipe-list' %}">Recipes</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'logout' %}">Logout</a>
+          <a href="{% url 'profile' %}">Profile</a>
+          <a href="{% url 'my-recipes' %}">My Recipes</a>
+          <a href="{% url 'notification-list' %}">
+            Notifications
+            {% if unread_notif_count > 0 %}
+              <span class="notification-badge">{{ unread_notif_count }}</span>
+            {% endif %}
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+      </nav>
+    </header>
 
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <span>© 2025 Future millionaires</span>
+        <a href="mailto:contact@culinarycloud.com">Contact</a>
+      </div>
+    </footer>
+  </div>
 
   {% block extra_js %}{% endblock %}
 </body>
